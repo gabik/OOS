@@ -1,0 +1,16 @@
+#!/bin/bash
+tables=`mysql -uroot -pwd83a2n<< EOF
+use django;
+show tables;
+EOF`
+
+for i in $tables
+do
+	mysql -uroot -pwd83a2n << EOF
+		use django;
+		drop table $i;
+EOF
+done
+
+python manage.py syncdb
+

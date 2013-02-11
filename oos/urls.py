@@ -9,8 +9,11 @@ admin.autodiscover()
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-	(r'^accounts/', include('..accounts.urls')),
+	(r'^account/', include('account.urls')),
 	(r'^admin/', include(admin.site.urls)),
+	(r'^static/admin/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.ADMIN_MEDIA_ROOT}),
+	(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+
     # Examples:
     # url(r'^$', 'oos.views.home', name='home'),
     # url(r'^oos/', include('oos.foo.urls')),

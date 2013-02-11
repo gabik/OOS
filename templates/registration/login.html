@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Login OOS</title>
+</script>
+</head>
+
+<body id="pagebody">
+<div id="content">
+  <table width="658" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="12" bgcolor="#FFFFFF">&nbsp;</td>
+      <td align="left"  dir= "ltr" valign="top" bgcolor="#FFFFFF">
+	  <form action="" method="post">
+	  <p class="titles_blue">Please Login</p></br>
+		{% if form.errors %} 
+		 <p class="titles_red">ERROR:</br><span class="titles_red"> Cannot Login</span></p>
+	    {% endif %}
+	  <label for="username" >UserName:</label>&nbsp;&nbsp;&nbsp;<span><input type="text" name="username" value="" id="username"></span></br><label for="password" class="titles_black">Password:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="password" name="password" value="" id="password"></br></br></br>
+		<input type="submit" id="enterBtn" value="login" >
+		<input type="hidden" name="next" value="/account/is_login" />
+		{% csrf_token %}
+		
+		</form>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/accounts/new/">Create New User!</a>
+		</td>
+    </tr>
+  </table>
+  </br>
+  </div>
+</body>
+</html>
+

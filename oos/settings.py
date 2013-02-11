@@ -45,7 +45,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+
+import os
+SETTINGS_FILE_FOLDER = os.path.dirname(__file__)
+MEDIA_ROOT = os.path.join(SETTINGS_FILE_FOLDER, '../static')
+ADMIN_MEDIA_ROOT = '/usr/lib/python2.6/site-packages/django/contrib/admin/static/admin/'
+#ADMIN_MEDIA_PREFIX = '/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -106,6 +111,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+	os.path.join(os.path.dirname(__file__), '../templates'),
 )
 
 INSTALLED_APPS = (
@@ -119,6 +125,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+		'account',
 )
 
 # A sample logging configuration. The only tangible logging
