@@ -1,12 +1,12 @@
 #!/bin/bash
-tables=`mysql -uroot -pwd83a2n<< EOF
+tables=`mysql -p$1 << EOF
 use django;
 show tables;
 EOF`
 
 for i in $tables
 do
-	mysql -uroot -pwd83a2n << EOF
+	mysql -p$1 << EOF
 		use django;
 		drop table $i;
 EOF
