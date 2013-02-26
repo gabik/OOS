@@ -12,7 +12,7 @@
     <tr>
       <td width="12" bgcolor="#FFFFFF">&nbsp;</td>
       <td align="left"  dir= "ltr" valign="top" bgcolor="#FFFFFF">
-	  <form action="" method="post">
+	  <form action="/account/Plogin/" method="post">
 	  <p class="titles_blue">Please Login</p></br>
 		{% if form.errors %} 
 		 <p class="titles_red">ERROR:</br><span class="titles_red"> Cannot Login</span></p>
@@ -23,7 +23,7 @@
 		{% csrf_token %}
 		
 		</form>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/accounts/new/">Create New User!</a>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/account/new/">Create New User!</a>
 		</td>
     </tr>
   </table>

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from account.forms import UserForm, UserProfileForm, AgreeForm
 from django.template import RequestContext
-from django.utils import simplejson
+from django.utils import simplejson as json
 
 
 def is_login(request):
@@ -13,7 +13,7 @@ def is_login(request):
 		c['user'] = request.user
 		return render_to_response('account/after_login.html', c)
 	else: # Nothing has been posted
-		return HttpResponse('Please login')
+		return HttpResponse('You are not logged in, Please login')
 
 def create_user(request):
 	if request.method == 'POST': # If the form has been submitted...
@@ -40,3 +40,11 @@ def create_user(request):
 		agree_form = AgreeForm()
 	return render_to_response('registration/create_user.html', { 'userprofile_form': userprofile_form, 'user_form': user_form, 'agree_form': agree_form}, context_instance=RequestContext(request))
 
+def Plogin (request):
+	json_dump = json.dumps({'status': "Error"})
+	if request.method == 'POST':
+		new_user = authenticate(username=request.POST['username'], password=request.POST['password'])
+		if new_user :
+			json_dump = json.dumps({'status': "OK"})
+			login(request, new_user)
+	return HttpResponse(json_dump)

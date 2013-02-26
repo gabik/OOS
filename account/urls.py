@@ -4,6 +4,7 @@ from account import views
 
 urlpatterns = patterns('account.views',
 	(r'^login/$', login),
+	(r'^Plogin/$', 'Plogin'),
 	#(r'^add_person/$', 'add_person'),
 	(r'^new/$', 'create_user'),
 	(r'^logout/$', logout),
