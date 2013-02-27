@@ -15,11 +15,6 @@ def get_child(request):
 		if parent == "" :
 			parent = None
 		items = item.objects.filter(parent_id=parent)
-		#items_name = ""
-		#for i in items:
-			#items_name += ","
-			#items_name += items.name
-		#json_dump = json.dumps({'status': "OK", 'childs': items_name})
 		json_dump = serializers.serialize("json", items)
 	return HttpResponse(json_dump)
 

@@ -12,11 +12,11 @@ def is_login(request):
 		c = {}
 		c['user'] = request.user
 		return render_to_response('account/after_login.html', c)
-	else: # Nothing has been posted
+	else: 
 		return HttpResponse('You are not logged in, Please login')
 
 def create_user(request):
-	if request.method == 'POST': # If the form has been submitted...
+	if request.method == 'POST': 
 		agree_form = AgreeForm(request.POST)
 		userprofile_form = UserProfileForm(request.POST)
 		user_form = UserForm(request.POST)
