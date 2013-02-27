@@ -20,3 +20,9 @@ class UserProfile(models.Model):
 	def __unicode__(self):
 		return self.user.username
 
+class status(models.Model):
+	status = models.CharField(max_length=30)
+	MSG = models.CharField(max_length=30, blank=True)
+	
+	def __unicode__(self):
+		return self.status + " : " + str(self.MSG)

@@ -40,7 +40,7 @@ class pics(models.Model):
 		return self.work_id.item.name + " : " + self.work_id.client_user.username 
 
 class price(models.Model):
-	client_user = models.ForeignKey(User, unique=False, related_name="price_client")
+	work_id = models.ForeignKey(work, unique=False)
 	provider_user = models.ForeignKey(User, unique=False, related_name="price_provider")
 	price = models.DecimalField(max_digits=10,decimal_places=2)
 	text = models.TextField()
@@ -49,5 +49,5 @@ class price(models.Model):
 	is_active = models.BooleanField(default=1)
 
 	def __unicode__(self):
-		return self.work_id + " : " + self.provider_user + " : " + self.price
+		return str(self.work_id) + " : " + str(self.provider_user) + " : " + str(self.price)
 

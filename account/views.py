@@ -5,15 +5,17 @@ from django.contrib.auth import authenticate, login
 from account.forms import UserForm, UserProfileForm, AgreeForm
 from django.template import RequestContext
 from django.utils import simplejson as json
+from account.models import status
+from django.core import serializers
 
 
 def is_login(request):
 	if request.user.is_authenticated():
-		c = {}
-		c['user'] = request.user
-		return render_to_response('account/after_login.html', c)
+		json_data = status.objects.filter(status='OK')
 	else: 
-		return HttpResponse('You are not logged in, Please login')
+		json_data = status.objects.filter(status='ERR', MSG='LGN')
+	json_dump = serializers.serialize("json", json_data)
+	return HttpResponse(json_dump)
 
 def create_user(request):
 	if request.method == 'POST': 
@@ -40,8 +42,46 @@ def create_user(request):
 		agree_form = AgreeForm()
 	return render_to_response('registration/create_user.html', { 'userprofile_form': userprofile_form, 'user_form': user_form, 'agree_form': agree_form}, context_instance=RequestContext(request))
 
+def create_P_user(request):
+	json_dump = json.dumps({'status': "ERR"})
+	if request.method == 'POST':
+		username=request.POST['username']
+		email=request.POST['email']
+		password=request.POST['password']
+		firstname=request.POST['first_name']
+		lastname=request.POST['last_name']
+		created_user = User.objects.create_user(username,email,password)
+		created_user.first_name=firstname
+		created_user.last_name=lastname
+		created_user.save()
+
+		phone_num1=request.POST['phoneNum1']
+		phone_num2=request.POST['phoneNum2']
+		address=request.POST['address']
+		birthday=request.POST['birthday']
+		area_id=request.POST['area_id']
+		userprofile = userprofile_form.save(commit=False)
+		userprofile.user = created_user
+		userprofile.Level = 0
+		userprofile.isCustomer = True
+		userprofile.phone_num1 = phone_num1
+		userprofile.phone_num2 = phone_num2
+		userprofile.address = address
+		userprofile.birthday = birthday
+		userprofile.area_id = area.objects.get(id=area_id)
+		userprofile.save()
+
+		new_user = authenticate(username=request.POST['username'], password=request.POST['password1'])
+		login(request, new_user)
+		
+		json_dump = json.dumps({'status': "OK"})
+	else:
+		json_dump = json.dumps({'status': "ERR", "MSG": "NoData"})
+	return HttpResponse(json_dump)
+	
+
 def Plogin (request):
-	json_dump = json.dumps({'status': "Error"})
+	json_dump = json.dumps({'status': "ERR"})
 	if request.method == 'POST':
 		new_user = authenticate(username=request.POST['username'], password=request.POST['password'])
 		if new_user :
