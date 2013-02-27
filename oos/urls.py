@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
+from oos.views import get_child
 admin.autodiscover()
 
 
@@ -10,6 +11,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 	(r'^account/', include('account.urls')),
+	(r'^oos/get_child/$', get_child),
 	(r'^admin/', include(admin.site.urls)),
 	(r'^static/admin/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.ADMIN_MEDIA_ROOT}),
 	(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),

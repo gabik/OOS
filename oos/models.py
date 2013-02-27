@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class item(models.Model):
-	parent_id = models.PositiveIntegerField()
+	parent_id = models.ForeignKey('self', unique=False, blank=True, null=True)
 	name = models.CharField(max_length=100)
 	level = models.PositiveIntegerField()
 
