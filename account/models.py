@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 
 class area(models.Model):
 	name = models.CharField(max_length=30)
+
 	def __unicode__(self):
-		return name
+		return self.name
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User, unique=True)
@@ -15,7 +16,7 @@ class UserProfile(models.Model):
 	birthday = models.DateField()
 	is_client = models.BooleanField(default=1)
 	area_id = models.ForeignKey(area, unique=False)
+
 	def __unicode__(self):
-		printy = self.user.username
-		return printy
+		return self.user.username
 
