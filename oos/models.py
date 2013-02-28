@@ -28,6 +28,7 @@ class work(models.Model):
 	area = models.ForeignKey(area, unique=False)
 	post_date = models.DateTimeField(auto_now_add=True)
 	show_date = models.DateTimeField(auto_now=True)
+	end_date = models.DateField()
 
 	def __unicode__(self):
 		return self.item.name + " : " + self.client_user.username
