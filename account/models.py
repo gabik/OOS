@@ -10,10 +10,10 @@ class area(models.Model):
 class UserProfile(models.Model):
 	user = models.ForeignKey(User, unique=True)
 	phone_num1 = models.CharField(max_length=30)
-	phone_num2 = models.CharField(max_length=30)
+	phone_num2 = models.CharField(max_length=30, blank=True, null=True)
 	address = models.CharField(max_length=200)
 	level = models.IntegerField(default=0)
-	birthday = models.DateField()
+	birthday = models.DateField(blank=True, null=True)
 	is_client = models.BooleanField(default=1)
 	area_id = models.ForeignKey(area, unique=False)
 

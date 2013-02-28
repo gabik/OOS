@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type" />
+<meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+<link href="/static/css/style.css" type="text/css" rel="stylesheet" />
+<script src="/static/javascript/functions.js" type="text/javascript"></script>
+<link rel="apple-touch-icon" href="homescreen.png"/>
+<link href="startup.png" rel="apple-touch-startup-image" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<head>
+<title>Create User OOS</title>
+
+</head>
+
+<body id="pagebody">
+
+<div id="topbar">
+ <div id="title" > Create User </div>
+</div>
+<div id="content">
+  <table width=* border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td align="left"  dir= "ltr" valign="top" bgcolor="#FFFFFF">
+		<span class="graytitle">Enter Details:</span>
+		{% if user_form.errors or userprofile_form.errors %}
+        <p class="titles_red">
+Please Fix the following errors:
+        </p>
+		{% endif %}
+		<form action="." method="post">
+		<ul class="pageitem">
+		 <li class="bigfield"><input placeholder="Username" id="id_username" type="text" name="username" maxlength="100" /></li>
+		 <li class="bigfield"><input placeholder="Password" id="id_password1" type="password" name="password1" maxlength="20" /></li>
+		 <li class="bigfield"><input placeholder="Verify Password" id="id_password2" type="password" name="password2" maxlength="20" /></li>
+		 <li class="bigfield"><input placeholder="Email" id="id_email" type="text" name="email" maxlength="200" /></li>
+		 <li class="bigfield"><input placeholder="Phone Number" id="id_phoneNum" type="text" name="phoneNum" maxlength="30" /></li>
+		</ul>
+		{% for error in user_form.username.errors %}
+				<span class="text_14_red_bold">Please choose another username </span>
+		{% endfor %}</span></p>
+		{% for error in user_form.password1.errors %}
+				<span class="text_14_red_bold">Password: more than 5 chars</span>
+		{% endfor %}</span></p>
+		{% for error in user_form.password2.errors %}
+				<span class="text_14_red_bold">Not match </span>
+		{% endfor %}</span></p>
+		{% for error in user_form.email.errors %}
+				<span class="text_14_red_bold">Enter Valid Email </span>
+		{% endfor %}</span></p>
+		{% for error in userprofile_form.errors %}
+		<span class="text_14_red_bold">Enter Valid Phone Number</span>
+		{% endfor %}</span></p>
+		</div>
+
+		<div class="fieldWrapper">
+		  {{ agree_form.IAgree }}I agree to the following: <a href="/site/agreement.html" target=_blank> Read-Me</a><BR>
+		  {% for error in agree_form.IAgree.errors %}
+			<span class="text_14_red_bold">Please agree</span>
+		  {% endfor %}
+		</div><br>
+
+<ul class="pageitem">
+<li class="button">
+<input name="Submit" type="submit" value="Submit" />
+</li>
+</ul>
+
+		{% csrf_token %}
+		</form>
+
+  </table>
+</body>
+</html>
