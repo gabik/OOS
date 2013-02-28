@@ -52,6 +52,7 @@ def get_work(request):
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_user(request):
 	json_data = status.objects.filter(status='ERR',MSG='NE')
+	json_dump = serializers.serialize("json", json_data)
 	if request.method == 'POST':
 		user_id = request.POST['user_id']
 		if user_id == "" :
@@ -59,19 +60,19 @@ def get_user(request):
 		else:
 			cur_user = User.objects.get(id=user_id)
 		if not cur_user:
-			json_dump = serializers.serialize("json", json_data)
 			return HttpResponse(json_dump)
 		cur_profile = UserProfile.objects.filter(user=cur_user)
 		if not cur_profile:
-			json_dump = serializers.serialize("json", json_data)
 			return HttpResponse(json_dump)
 		if cur_user != request.user:
 			if cur_profile.is_client:
-				json_dump = status.objects.filter(status='ERR', MSG='PD')
+				json_data = status.objects.filter(status='ERR', MSG='PD')
+				json_dump = serializers.serialize("json", json_data)
 				return HttpResponse(json_dump)
 		cur_user_dict={'username':cur_user.username,'email':cur_user.email,'firstname':cur_user.first_name,'lastname':cur_user.last_name}
-		json_data = list(status.objects.filter(status='OK')) + list(cur_user_dict) + list(cur_profile)
-	json_dump = serializers.serialize("json", json_data)
+		json_data = list(status.objects.filter(status='OK')) + list(cur_profile)
+		json_dump = serializers.serialize("json", json_data)
+		json_dump += str([cur_user_dict])
 	return HttpResponse(json_dump)
 
 			
