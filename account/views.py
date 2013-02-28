@@ -115,10 +115,11 @@ def create_P_user2(request):
 	
 
 def Plogin (request):
-	json_dump = json.dumps({'status': "ERR"})
+	json_data=list(status.objects.filter(status='ERR',MSG='PD')) 
 	if request.method == 'POST':
 		new_user = authenticate(username=request.POST['username'], password=request.POST['password'])
 		if new_user :
-			json_dump = json.dumps({'status': "OK"})
+			json_data = status.objects.filter(status='OK')
 			login(request, new_user)
+	json_dump = serializers.serialize("json", json_data)
 	return HttpResponse(json_dump)

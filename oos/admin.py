@@ -1,6 +1,5 @@
 from django.contrib import admin
 from oos.models import item, opinion, work, pics, price 
-from oos.forms import items_import
 
 class itemAdmin(admin.ModelAdmin):
 	list_display = ['id', 'parent_id', 'name', 'level']

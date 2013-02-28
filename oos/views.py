@@ -1,4 +1,5 @@
 from oos.models import item, work, pics
+from oos.forms import new_work
 from account.models import UserProfile, area, status
 from django.utils import simplejson as json
 from django.contrib.auth.decorators import login_required
@@ -75,4 +76,30 @@ def get_user(request):
 		json_dump += str([cur_user_dict])
 	return HttpResponse(json_dump)
 
+def post_work(request):
+	json_data=status.objects.filter(status='ERR',MSG=None)
+	errors=""
+	if UserProfile.objects.get(user=request.user).is_client:
+		if request.method == 'POST':
+			cur_work = new_work(request.POST)
+			if cur_work.is_valid():
+				work_clean = cur_work.cleaned_data
+				if item.objects.filter(parent_id=request.POST['item']) :
+					json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+				else:
+					cur_work_save = cur_work.save(commit=False)
+					cur_work_save.client_user = request.user
+					cur_work_save.save()
+					json_data = status.objects.filter(status='OK')
+			else:
+				json_data = status.objects.filter(status='WRN')
+				errors = list(cur_work.errors.items())
+		else:
+			json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+			cur_work = new_work()
+	else:
+		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+	json_dump = serializers.serialize("json", json_data)
+	json_dump += str(errors)
+	return HttpResponse(json_dump)
 			

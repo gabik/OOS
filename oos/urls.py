@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
-from oos.views import get_child, get_work, get_user
+from oos.views import get_child, get_work, get_user, post_work
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -9,6 +9,7 @@ urlpatterns = patterns('',
 	(r'^oos/get_child/$', get_child),
 	(r'^oos/get_work/$', get_work),
 	(r'^oos/get_user/$', get_user),
+	(r'^oos/post_work/$', post_work),
 	(r'^admin/', include(admin.site.urls)),
 	(r'^static/admin/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.ADMIN_MEDIA_ROOT}),
 	(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
