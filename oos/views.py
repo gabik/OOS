@@ -15,7 +15,7 @@ def get_child(request):
 		parent = request.POST['parent']
 		if (parent == "") or (parent == "0") :
 			parent = None
-		items = list(item.objects.filter(parent_id=parent))
+		items = item.objects.filter(parent_id=parent).order_by('id')
 		if not items:
 			json_data = status.objects.filter(status='ERR', MSG='NE')
 		else:
