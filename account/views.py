@@ -117,12 +117,16 @@ def create_P_user2(request):
 	
 
 def Plogin (request):
-	json_data=list(status.objects.filter(status='ERR',MSG='PD')) 
+	json_data=list(status.objects.filter(status='ERR',MSG='NE')) 
 	if request.method == 'POST':
+		json_data=list(status.objects.filter(status='ERR',MSG='NE'))
 		new_user = authenticate(username=request.POST['username'], password=request.POST['password'])
 		if new_user :
 			json_data = status.objects.filter(status='OK')
-			login(request, new_user)
+			if new_user.is_active:
+				login(request, new_user)
+			else:
+				json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 	json_dump = serializers.serialize("json", json_data)
 	return HttpResponse(json_dump)
 
@@ -234,3 +238,18 @@ def reject_prov(requesti, UserId, UserHash):
 	else:
 		msg = "Unknown User ID.. not exist"
 	return HttpResponse(msg)
+
+def check_area(higher, lower):
+	if higher == lower:
+		answer = True
+	else:
+		cur_lower = area.objects.filter(id=lower)
+		if  cur_lower:
+			parent_lower = cur_lower[0].parent
+			if not parent_lower:
+				answer = False
+			else:
+				answer = check_area(higher, cur_lower[0].parent.id)
+		else:
+			answer = False
+	return answer

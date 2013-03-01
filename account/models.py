@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 class area(models.Model):
 	name = models.CharField(max_length=30)
+	parent = models.ForeignKey('self', unique=False, blank=True, null=True)
 
 	def __unicode__(self):
 		return self.name
