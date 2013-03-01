@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from account.forms import UserForm, UserProfileForm, AgreeForm
+from account.forms import UserForm, UserProfileForm, AgreeForm, ProvProfileForm
 from django.template import RequestContext
 from django.utils import simplejson as json
 from account.models import status, area
@@ -123,3 +123,39 @@ def Plogin (request):
 			login(request, new_user)
 	json_dump = serializers.serialize("json", json_data)
 	return HttpResponse(json_dump)
+
+def create_P_provider(request):
+	json_data=status.objects.filter(status='ERR',MSG=None)
+	errors=""
+	if request.method == 'POST':
+		userprofile_form = ProvProfileForm(request.POST)
+		user_form = UserForm(request.POST)
+		if userprofile_form.is_valid() and user_form.is_valid():
+			user_clean_data = user_form.cleaned_data
+			created_user = User.objects.create_user(user_clean_data['username'], user_clean_data['email'], user_clean_data['password1'])
+			created_user.first_name=request.POST['firstname']
+			created_user.last_name=request.POST['lastname']
+			created_user.is_active = False
+			created_user.save()
+			userprofile = userprofile_form.save(commit=False)
+			userprofile.user = created_user
+			userprofile.level = userprofile_form.cleaned_data['level']
+			userprofile.is_client = False
+			userprofile.phone_num1 = userprofile_form.cleaned_data['phone_num1']
+			userprofile.phone_num2 = userprofile_form.cleaned_data['phone_num2']
+			userprofile.address = userprofile_form.cleaned_data['address']
+			userprofile.birthday = userprofile_form.cleaned_data['birthday']
+			userprofile.area_id = userprofile_form.cleaned_data['area_id']
+			userprofile.save()
+			#new_user = authenticate(username=request.POST['username'], password=request.POST['password1'])
+			#login(request, new_user)
+			json_data = status.objects.filter(status='OK')
+		else:
+			json_data = status.objects.filter(status='WRN')
+			errors = list(userprofile_form.errors.items()) + list(user_form.errors.items())
+	else:
+		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+	json_dump = serializers.serialize("json", json_data)
+	json_dump += str(errors)
+	return HttpResponse(json_dump)
+
