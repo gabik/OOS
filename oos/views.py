@@ -1,5 +1,5 @@
 from oos.models import item, work, pics
-from oos.forms import new_work
+from oos.forms import new_work, new_price
 from account.models import UserProfile, area, status
 from django.utils import simplejson as json
 from django.contrib.auth.decorators import login_required
@@ -96,10 +96,35 @@ def post_work(request):
 				errors = list(cur_work.errors.items())
 		else:
 			json_data=list(status.objects.filter(status='ERR',MSG='PD'))
-			cur_work = new_work()
 	else:
 		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 	json_dump = serializers.serialize("json", json_data)
 	json_dump += str(errors)
 	return HttpResponse(json_dump)
+			
+def post_price(request):
+	json_data=status.objects.filter(status='ERR',MSG=None)
+	errors=""
+	if not UserProfile.objects.get(user=request.user).is_client:
+		if request.method == 'POST':
+			cur_price = new_price(request.POST)
+			if cur_price.is_valid():
+				price_clean = cur_price.cleaned_data
+				cur_price_save = cur_price.save(commit=False)
+				cur_price_save.provider_user = request.user
+				cur_price_save.is_active = True
+				cur_price_save.save()
+				json_data = status.objects.filter(status='OK')
+			else:
+				json_data = status.objects.filter(status='WRN')
+				errors = list(cur_price.errors.items())
+		else:
+			json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+			cur_price = new_price()
+	else:
+		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+	json_dump = serializers.serialize("json", json_data)
+	json_dump += str(errors)
+	return HttpResponse(json_dump)
+	#return render_to_response('oos/new_price.html', { 'new_price': cur_price}, context_instance=RequestContext(request))
 			
