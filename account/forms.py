@@ -46,9 +46,9 @@ class UserForm(forms.Form):
 class UserProfileForm(ModelForm):
 	class Meta:
 		model = UserProfile
-		exclude = ('user', 'is_client', 'level')
+		exclude = ('user', 'is_client', 'level', 'hash')
 
 class ProvProfileForm(ModelForm):
 	class Meta:
 		model = UserProfile
-		exclude = ('user', 'is_client')
+		exclude = ('user', 'is_client', 'hash')

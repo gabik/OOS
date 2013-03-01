@@ -7,6 +7,8 @@ from django.template import RequestContext
 from django.utils import simplejson as json
 from account.models import status, area
 from django.core import serializers
+from django.core.mail import EmailMultiAlternatives
+import hashlib
 
 
 def is_login(request):
@@ -146,9 +148,19 @@ def create_P_provider(request):
 			userprofile.address = userprofile_form.cleaned_data['address']
 			userprofile.birthday = userprofile_form.cleaned_data['birthday']
 			userprofile.area_id = userprofile_form.cleaned_data['area_id']
+			userprofile.hash = hashlib.sha224("OOS" + created_user.username + created_user.email).hexdigest()
 			userprofile.save()
 			#new_user = authenticate(username=request.POST['username'], password=request.POST['password1'])
 			#login(request, new_user)
+			subject = "new provider notice"
+			accept_link = 'http://ws.kazav.net/account/accept_prov/' + str(created_user.id) + '/' + userprofile.hash + '/'
+			html_message = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">New provider want access.<BR> Name: ' + created_user.first_name + ' ' + created_user.last_name + '<BR> <a href="' + accept_link + '"> ACCEPT </a>'
+			text_message = 'New provider want access. Name: ' + created_user.first_name + ' ' + created_user.last_name + '      ACCEPT it at: ' + accept_link
+			user_mail="ohad@kazav.net"
+			msg = EmailMultiAlternatives(subject, text_message, 'OOS Server<contact@oos.com>', [user_mail])
+			msg.attach_alternative(html_message,"text/html")
+			msg.send()
+
 			json_data = status.objects.filter(status='OK')
 		else:
 			json_data = status.objects.filter(status='WRN')
