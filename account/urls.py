@@ -10,7 +10,7 @@ urlpatterns = patterns('account.views',
 	(r'^Pnew_prov/$', 'create_P_provider'),
 	(r'^logout/$', logout),
 	(r'^is_login/$', 'is_login'),
-	#(r'^invation/(?P<guestHash>\w+)/$', 'invation'),
+	(r'^accept_prov/(?P<UserId>\d+)/(?P<UserHash>\w+)/$', 'accept_prov'),
 	#(r'^unsubscribe/(?P<guestHash>\w+)/$', 'unsubscribe'),
 )
 
