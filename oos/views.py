@@ -70,10 +70,16 @@ def get_user(request):
 				json_data = status.objects.filter(status='ERR', MSG='PD')
 				json_dump = serializers.serialize("json", json_data)
 				return HttpResponse(json_dump)
-		cur_user_dict={'username':cur_user.username,'email':cur_user.email,'firstname':cur_user.first_name,'lastname':cur_user.last_name}
-		json_data = list(status.objects.filter(status='OK')) + list(cur_profile)
-		json_dump = serializers.serialize("json", json_data)
-		json_dump += str([cur_user_dict])
+		cur_user_dict=str('[{"username":"' + cur_user.username + '","email":"' + cur_user.email + '","firstname":"' + cur_user.first_name + '","lastname":"' + cur_user.last_name + '"}]')
+		json_data = list(status.objects.filter(status='OK')) 
+		json_dump = '['
+		json_dump += serializers.serialize("json", json_data)
+		json_dump += ','
+		json_data = list(cur_profile)
+		json_dump += serializers.serialize("json", json_data)
+		json_dump += ','
+		json_dump += cur_user_dict
+		json_dump += ']'
 	return HttpResponse(json_dump)
 
 def post_work(request):
