@@ -180,18 +180,21 @@ def accept_prov(requesti, UserId, UserHash):
 		if cur_profile:
 			cur_hash = cur_profile[0].hash
 			if UserHash == cur_hash:
-				cur_profile[0].hash="OK"
-				cur_profile[0].save()
-				cur_user[0].is_active=True
-				cur_user[0].save()
-				msg = cur_user[0].username + " Has been activated. i sent him a mail."
-				subject = "Account activated"
-				html_message = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">Your Account has activated!<BR>You can login with the username ' + cur_user[0].username
-				text_message = 'Your Account has activated!<BR>You can login with the username ' + cur_user[0].username
-				user_mail = cur_user[0].email
-				emsg = EmailMultiAlternatives(subject, text_message, 'OOS Server<contact@oos.com>', [user_mail])
-				emsg.attach_alternative(html_message,"text/html")
-				emsg.send()
+				if cur_hash == 'LK' or cur_hash == 'OK':
+					msg = "Cannot accept rejected provider (or viseversa)"
+				else:
+					cur_profile[0].hash="OK"
+					cur_profile[0].save()
+					cur_user[0].is_active=True
+					cur_user[0].save()
+					msg = cur_user[0].username + " Has been activated. i sent him a mail."
+					subject = "Account activated"
+					html_message = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">Your Account has activated!<BR>You can login with the username ' + cur_user[0].username
+					text_message = 'Your Account has activated!<BR>You can login with the username ' + cur_user[0].username
+					user_mail = cur_user[0].email
+					emsg = EmailMultiAlternatives(subject, text_message, 'OOS Server<contact@oos.com>', [user_mail])
+					emsg.attach_alternative(html_message,"text/html")
+					emsg.send()
 			else:
 				msg = "Hash do not match... do not fool me!"
 		else:
@@ -208,19 +211,22 @@ def reject_prov(requesti, UserId, UserHash):
 		if cur_profile:
 			cur_hash = cur_profile[0].hash
 			if UserHash == cur_hash:
-				cur_user[0].username += ".LK"
-				cur_user[0].email += ".LK"
-				cur_user[0].save()
-				cur_profile[0].hash = "LK"
-				cur_profile[0].save()
-				msg = cur_user[0].username + " Has been Deactivated. No mail was sent to provider"
-				#subject = "Account activated"
-				#html_message = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">Your Account has activated!<BR>You can login with the username ' + cur_user.username
-				#text_message = 'Your Account has activated!<BR>You can login with the username ' + cur_user.username
-				#user_mail = cur_user.email
-				#emsg = EmailMultiAlternatives(subject, text_message, 'OOS Server<contact@oos.com>', [user_mail])
-				#emsg.attach_alternative(html_message,"text/html")
-				#emsg.send()
+				if cur_hash == 'LK' or cur_hash == 'OK':
+					msg = "Cannot reject accepted provider (or viseversa)"
+				else:
+					cur_user[0].username += ".LK"
+					cur_user[0].email += ".LK"
+					cur_user[0].save()
+					cur_profile[0].hash = "LK"
+					cur_profile[0].save()
+					msg = cur_user[0].username + " Has been Deactivated. No mail was sent to provider"
+					#subject = "Account activated"
+					#html_message = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">Your Account has activated!<BR>You can login with the username ' + cur_user.username
+					#text_message = 'Your Account has activated!<BR>You can login with the username ' + cur_user.username
+					#user_mail = cur_user.email
+					#emsg = EmailMultiAlternatives(subject, text_message, 'OOS Server<contact@oos.com>', [user_mail])
+					#emsg.attach_alternative(html_message,"text/html")
+					#emsg.send()
 			else:
 				msg = "Hash do not match... do not fool me!"
 		else:
