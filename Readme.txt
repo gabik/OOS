@@ -8,4 +8,7 @@ get_work - check for area
 post_work - handle pictures
 add_pic - add picture to work
 items - binary tree
-create provider - handle accept and send mail to the provider
+
+
+Redesign:
+provider mail, when he accepted.

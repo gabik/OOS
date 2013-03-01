@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from account.forms import UserForm, UserProfileForm, AgreeForm, ProvProfileForm
 from django.template import RequestContext
 from django.utils import simplejson as json
-from account.models import status, area
+from account.models import status, area, UserProfile
 from django.core import serializers
 from django.core.mail import EmailMultiAlternatives
 import hashlib
@@ -154,8 +154,9 @@ def create_P_provider(request):
 			#login(request, new_user)
 			subject = "new provider notice"
 			accept_link = 'http://ws.kazav.net/account/accept_prov/' + str(created_user.id) + '/' + userprofile.hash + '/'
-			html_message = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">New provider want access.<BR> Name: ' + created_user.first_name + ' ' + created_user.last_name + '<BR> <a href="' + accept_link + '"> ACCEPT </a>'
-			text_message = 'New provider want access. Name: ' + created_user.first_name + ' ' + created_user.last_name + '      ACCEPT it at: ' + accept_link
+			reject_link = 'http://ws.kazav.net/account/reject_prov/' + str(created_user.id) + '/' + userprofile.hash + '/'
+			html_message = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">New provider want access.<BR> Name: ' + created_user.first_name + ' ' + created_user.last_name + '<BR> <a href="' + accept_link + '"> ACCEPT </a> or <a href="' + reject_link + '"> REJECT </a>'
+			text_message = 'New provider want access. Name: ' + created_user.first_name + ' ' + created_user.last_name + '      ACCEPT it at: ' + accept_link + '   or   REJECT it ati: ' + reject_link
 			user_mail="ohad@kazav.net"
 			msg = EmailMultiAlternatives(subject, text_message, 'OOS Server<contact@oos.com>', [user_mail])
 			msg.attach_alternative(html_message,"text/html")
@@ -171,3 +172,59 @@ def create_P_provider(request):
 	json_dump += str(errors)
 	return HttpResponse(json_dump)
 
+def accept_prov(requesti, UserId, UserHash):
+	msg = "Error... unknowd.. Shit.."
+	cur_user = User.objects.filter(id=UserId)
+	if cur_user:
+		cur_profile = UserProfile.objects.filter(user=cur_user[0])
+		if cur_profile:
+			cur_hash = cur_profile[0].hash
+			if UserHash == cur_hash:
+				cur_profile[0].hash="OK"
+				cur_profile[0].save()
+				cur_user[0].is_active=True
+				cur_user[0].save()
+				msg = cur_user[0].username + " Has been activated. i sent him a mail."
+				subject = "Account activated"
+				html_message = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">Your Account has activated!<BR>You can login with the username ' + cur_user[0].username
+				text_message = 'Your Account has activated!<BR>You can login with the username ' + cur_user[0].username
+				user_mail = cur_user[0].email
+				emsg = EmailMultiAlternatives(subject, text_message, 'OOS Server<contact@oos.com>', [user_mail])
+				emsg.attach_alternative(html_message,"text/html")
+				emsg.send()
+			else:
+				msg = "Hash do not match... do not fool me!"
+		else:
+			msg = "User has no profile.. check Admin"
+	else:
+		msg = "Unknown User ID.. not exist"
+	return HttpResponse(msg)
+
+def reject_prov(requesti, UserId, UserHash):
+	msg = "Error... unknowd.. Shit.."
+	cur_user = User.objects.filter(id=UserId)
+	if cur_user:
+		cur_profile = UserProfile.objects.filter(user=cur_user[0])
+		if cur_profile:
+			cur_hash = cur_profile[0].hash
+			if UserHash == cur_hash:
+				cur_user[0].username += ".LK"
+				cur_user[0].email += ".LK"
+				cur_user[0].save()
+				cur_profile[0].hash = "LK"
+				cur_profile[0].save()
+				msg = cur_user[0].username + " Has been Deactivated. No mail was sent to provider"
+				#subject = "Account activated"
+				#html_message = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">Your Account has activated!<BR>You can login with the username ' + cur_user.username
+				#text_message = 'Your Account has activated!<BR>You can login with the username ' + cur_user.username
+				#user_mail = cur_user.email
+				#emsg = EmailMultiAlternatives(subject, text_message, 'OOS Server<contact@oos.com>', [user_mail])
+				#emsg.attach_alternative(html_message,"text/html")
+				#emsg.send()
+			else:
+				msg = "Hash do not match... do not fool me!"
+		else:
+			msg = "User has no profile.. check Admin"
+	else:
+		msg = "Unknown User ID.. not exist"
+	return HttpResponse(msg)

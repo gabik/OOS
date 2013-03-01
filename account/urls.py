@@ -11,6 +11,7 @@ urlpatterns = patterns('account.views',
 	(r'^logout/$', logout),
 	(r'^is_login/$', 'is_login'),
 	(r'^accept_prov/(?P<UserId>\d+)/(?P<UserHash>\w+)/$', 'accept_prov'),
+	(r'^reject_prov/(?P<UserId>\d+)/(?P<UserHash>\w+)/$', 'reject_prov'),
 	#(r'^unsubscribe/(?P<guestHash>\w+)/$', 'unsubscribe'),
 )
 
