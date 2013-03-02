@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[ViewController SignIn]:ViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "+[DAL Login:password:]:DAL.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[urlData valueForKey:@&quot;1&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[CategoriesVC viewDidLoad]:CategoriseVC.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "globalCategoryID">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
