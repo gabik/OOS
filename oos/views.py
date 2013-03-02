@@ -1,5 +1,5 @@
 from oos.models import item, work, pics
-from oos.forms import new_work, new_price
+from oos.forms import new_work, new_price, new_pic
 from account.models import UserProfile, area, status
 from django.utils import simplejson as json
 from django.contrib.auth.decorators import login_required
@@ -9,6 +9,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.core import serializers
 from account.views import check_area
+from oos import settings
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_child(request):
@@ -139,3 +140,35 @@ def post_price(request):
 	return HttpResponse(json_dump)
 	#return render_to_response('oos/new_price.html', { 'new_price': cur_price}, context_instance=RequestContext(request))
 			
+def handle_uploaded_file(file_path):
+    dest = open(settings.MEDIA_ROOT + "/work_pics/" + file_path.name,"wb")
+    for chunk in file_path.chunks():
+        dest.write(chunk)
+    dest.close()
+
+def post_pic(request):
+	json_data=list(status.objects.filter(status='ERR',MSG='NE'))
+	errors=""
+	if request.method == 'POST': 
+		pic_form = new_pic(request.POST, request.FILES)
+		if pic_form.is_valid():
+			work_pic = work.objects.filter(id=request.POST['work_id'])
+			if work_pic:
+				user_work = work_pic[0].client_user
+				if user_work == request.user:
+					handle_uploaded_file(request.FILES["pic"])
+					pic_clean = pic_form.cleaned_data
+					cur_pic = pic_form.save()
+					json_data = status.objects.filter(status='OK')
+				else:
+					json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+		else:
+			json_data = status.objects.filter(status='WRN')
+			errors = list(pic_form.errors.items())
+	#else:
+		#pic_form = new_pic()
+		#return render_to_response('oos/post_pic.html', { 'pic_form': pic_form}, context_instance=RequestContext(request))
+	json_dump = serializers.serialize("json", json_data)
+	json_dump += str(errors)
+	return HttpResponse(json_dump)
+
