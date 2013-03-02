@@ -13,8 +13,12 @@
 
 @property (strong, nonatomic) UIWindow *window;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //0020000
 >>>>>>> change on ohads
+=======
+
+>>>>>>> testcommit
 
 @end
