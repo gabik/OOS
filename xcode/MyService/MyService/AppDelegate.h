@@ -12,5 +12,9 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+<<<<<<< HEAD
+=======
+//0020000
+>>>>>>> change on ohads
 
 @end
