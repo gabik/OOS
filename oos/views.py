@@ -8,6 +8,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.core import serializers
+from account.views import check_area
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_child(request):
@@ -39,7 +40,7 @@ def get_work(request):
 		PD_flag=True
 		if (request.user == cur_work[0].client_user ) :
 			PD_flag=False
-		elif (not user_profile.is_client) and (user_profile.area_id == cur_work[0].area):
+		elif (not user_profile.is_client) and check_area(user_profile.area_id.id,  cur_work[0].area.id):
 			PD_flag=False
 		if PD_flag:
 			json_data = status.objects.filter(status='ERR', MSG='PD')
@@ -111,22 +112,26 @@ def post_work(request):
 def post_price(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	errors=""
+	cur_user_area = UserProfile.objects.get(user=request.user).area_id.id
 	if not UserProfile.objects.get(user=request.user).is_client:
 		if request.method == 'POST':
 			cur_price = new_price(request.POST)
 			if cur_price.is_valid():
-				price_clean = cur_price.cleaned_data
-				cur_price_save = cur_price.save(commit=False)
-				cur_price_save.provider_user = request.user
-				cur_price_save.is_active = True
-				cur_price_save.save()
-				json_data = status.objects.filter(status='OK')
+				work_area = work.objects.get(id=request.POST['work_id']).area.id
+				if check_area(cur_user_area, work_area):
+					price_clean = cur_price.cleaned_data
+					cur_price_save = cur_price.save(commit=False)
+					cur_price_save.provider_user = request.user
+					cur_price_save.is_active = True
+					cur_price_save.save()
+					json_data = status.objects.filter(status='OK')
+				else:
+					json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 			else:
 				json_data = status.objects.filter(status='WRN')
 				errors = list(cur_price.errors.items())
 		else:
 			json_data=list(status.objects.filter(status='ERR',MSG='PD'))
-			cur_price = new_price()
 	else:
 		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 	json_dump = serializers.serialize("json", json_data)
