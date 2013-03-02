@@ -1,2 +1,3 @@
 *.pyc
 static/work_pics/*
+.DS_Store
