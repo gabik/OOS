@@ -1146,6 +1146,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MoreVC.h"/>
             <relationships>
                 <relationship kind="action" name="DoneButton:"/>
+                <relationship kind="action" name="TellFrindButton:"/>
                 <relationship kind="outlet" name="PickerViewContainer" candidateClass="UIView"/>
                 <relationship kind="outlet" name="TellFrindButton" candidateClass="UIButton"/>
             </relationships>
@@ -1158,6 +1159,9 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             <relationships>
                 <relationship kind="action" name="SelectExistingPicture:"/>
                 <relationship kind="action" name="TakeNewPhoto:"/>
+                <relationship kind="action" name="animationDidStop:finished:context:" candidateClass="NSString"/>
+                <relationship kind="action" name="oneFingerSwipeDown:"/>
+                <relationship kind="action" name="oneFingerSwipeUp:"/>
                 <relationship kind="outlet" name="SwipeLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="infoArray" candidateClass="NSArray"/>
