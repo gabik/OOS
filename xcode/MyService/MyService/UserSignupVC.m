@@ -20,7 +20,7 @@
 @synthesize SignUpTable;
 
 NSArray *parametersArray;
-NSArray *userDetailsArray;
+NSArray *valuesArray;
 float cellHight;
 float hightDiffrecne;
 float keyboardPosition;
@@ -40,10 +40,10 @@ bool isTableUp;
 
 -(void)postSignUp
 {
-    //TODO: create userDetailsArray.
+    //TODO: create valuesArray.
     //
     
-    BOOL signUpUser = [DAL userSignup:userDetailsArray parametersArray:parametersArray];
+    BOOL signUpUser = [DAL userSignup:valuesArray parametersArray:parametersArray];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
