@@ -12,16 +12,5 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-//0020000
->>>>>>> change on ohads
-=======
 
-<<<<<<< HEAD
->>>>>>> testcommit
-
-=======
->>>>>>> fix
 @end
