@@ -71,11 +71,15 @@ def create_P_user(request):
 			json_data = status.objects.filter(status='OK')
 		else:
 			json_data = status.objects.filter(status='WRN')
-			errors = list(userprofile_form.errors.items()) + list(user_form.errors.items())
+			#errors = list(userprofile_form.errors.items()) + list(user_form.errors.items())
+			#errors = str([(k, v[0].__str__()) for k, v in userprofile_form.errors.items()])
+			errors = ",[" + str(dict([(k, v[0].__str__()) for k, v in user_form.errors.items()])) + "]"
+			#errors += str([(k, v[0].__str__()) for k, v in user_form.errors.items()])
+			errors += ",[" + str(dict([(k, v[0].__str__()) for k, v in userprofile_form.errors.items()])) + "]"
 	else:
 		json_data=list(status.objects.filter(status='ERR',MSG='PD')) 
 	json_dump = serializers.serialize("json", json_data)
-	json_dump += str(errors)
+	json_dump += errors
 	return HttpResponse(json_dump)
 
 def create_P_user2(request):
@@ -169,11 +173,13 @@ def create_P_provider(request):
 			json_data = status.objects.filter(status='OK')
 		else:
 			json_data = status.objects.filter(status='WRN')
-			errors = list(userprofile_form.errors.items()) + list(user_form.errors.items())
+			#errors = list(userprofile_form.errors.items()) + list(user_form.errors.items())
+			errors = str([(k, v[0].__str__()) for k, v in userprofile_form.errors.items()])
+			errors += str([(k, v[0].__str__()) for k, v in user_form.errors.items()])
 	else:
 		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 	json_dump = serializers.serialize("json", json_data)
-	json_dump += str(errors)
+	json_dump += errors
 	return HttpResponse(json_dump)
 
 def accept_prov(requesti, UserId, UserHash):

@@ -9,7 +9,10 @@
 #import "ProviderSignup.h"
 #import <QuartzCore/QuartzCore.h>
 #import "DAL.h"
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 
 
 @interface  ProviderSignup()
@@ -23,6 +26,7 @@
 @synthesize datePicker;
 @synthesize datePickerDoneButton;
 
+<<<<<<< HEAD
 NSArray *parametersNameArray;
 NSArray *parametersArray;
 NSMutableArray *valuesArray;
@@ -38,11 +42,24 @@ CGRect originTableFrame;
 float cellHight;
 float hightDiffrecne;
 float keyboardPosition;
+=======
+NSArray *parametersArray;
+NSArray *valuesArray;
+
+float cellHight;
+float hightDiffrecne;
+float keyboardPosition;
+
+>>>>>>> master
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    keyboardPosition = [self.view frame].size.height -216-70;
+
+        parametersArray = [[NSArray alloc]initWithObjects:@"Business Name",@"Email",@"Password",@"Verify Password",@"First Name",@"Last Name",@"Phone Number",@"Extra Phone Number",@"Address",@"area",@"Profession", nil];
     
+<<<<<<< HEAD
     //MARK: coloring
     [SignUpTable setBackgroundColor:globalTableBgColor];
     [self.view setBackgroundColor:globalBgColor];
@@ -101,10 +118,16 @@ float keyboardPosition;
 {
     //create and add the datepicker.
     [datePicker addTarget:self action:@selector(pickerChanged:) forControlEvents:UIControlEventValueChanged];    
+=======
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithTitle:@"Signup!"
+                                                                    style:UIBarButtonSystemItemDone target:self action:@selector(postSignUp)];
+    self.navigationItem.rightBarButtonItem = rightButton;
+>>>>>>> master
 }
 -(void)postSignUp
 {
 
+<<<<<<< HEAD
     //create valuesArray.
     valuesArray = [[NSMutableArray alloc]init];
     for (int i=0; i<[parametersArray count]; i++)
@@ -135,13 +158,26 @@ float keyboardPosition;
         //if everything ok, go back to login screen.
         [self.navigationController popViewControllerAnimated:YES];
     }
+=======
+-(void)postSignUp
+{
+    //TODO: create valuesArray.
+    //
+    valuesArray = [[ NSArray alloc]init];
+    BOOL isSignUpSucceeded = [DAL provSignup:valuesArray parametersArray:parametersArray];
+>>>>>>> master
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
+<<<<<<< HEAD
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+=======
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    // Number of rows is the number of time zones in the region for the specified section.
+>>>>>>> master
     return [parametersArray count];
 }
 
@@ -153,8 +189,10 @@ float keyboardPosition;
     }
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
+    cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.textColor = globalMainTextColor;
     cell.textLabel.font = [UIFont systemFontOfSize:14];
+<<<<<<< HEAD
     //cell.backgroundColor = [UIColor lightGrayColor];
     UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, (SignUpTable.frame.size.width-30), cell.frame.size.height/5*3)];
     //cell.textLabel.text=[parametersArray objectAtIndex:indexPath.row];
@@ -166,12 +204,19 @@ float keyboardPosition;
     {
         textField.text = [valuesArray objectAtIndex:indexPath.row];
     }
+=======
+    cell.textLabel.text = [parametersArray objectAtIndex:indexPath.row];
+    
+    UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, (SignUpTable.frame.size.width/2), cell.frame.size.height/2)];
+    textField.placeholder = [parametersArray objectAtIndex:indexPath.row];
+>>>>>>> master
     textField.delegate = self;
     [textField setReturnKeyType:UIReturnKeyDone];
     textField.font = [UIFont systemFontOfSize:15];
     textField.textColor = [UIColor blueColor];
     textField.textAlignment = NSTextAlignmentCenter;
     textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+<<<<<<< HEAD
     textField.backgroundColor = globalTextFieldBgColor;
     textField.layer.borderColor = [[UIColor clearColor]CGColor];
     textField.layer.borderWidth = 1.0;
@@ -198,18 +243,31 @@ float keyboardPosition;
         textField.inputView = pickerView;
         textField.inputAccessoryView = numberToolbar;
     }
+=======
+    textField.backgroundColor = [UIColor whiteColor];
+    textField.layer.borderColor = [[UIColor grayColor]CGColor];
+    textField.layer.borderWidth = 1.0;
+    [textField.layer setCornerRadius:8.0f];
+    [textField.layer setMasksToBounds:YES];
+    textField.tag = indexPath.row;
+>>>>>>> master
     cell.accessoryView = textField;
     
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)   indexPath{
+<<<<<<< HEAD
     cellHight = 32;
+=======
+    cellHight = ([SignUpTable frame].size.height-20)/[parametersArray count];
+>>>>>>> master
     return cellHight;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
+<<<<<<< HEAD
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     [UIView beginAnimations:nil context:NULL];
@@ -318,6 +376,46 @@ float keyboardPosition;
     // Fill the label text here
     tView.text = [[areaDictionary allKeys] objectAtIndex:row];
     return tView;
+=======
+
+
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    float originalPosition = (cellHight*(textField.tag+1));
+    float currentPosition = SignUpTable.frame.origin.y+originalPosition;
+    NSLog(@"the original position is %f, the current position is %f",originalPosition,currentPosition);
+    if((originalPosition-keyboardPosition)>0)
+    {
+        float hightDiff = currentPosition-keyboardPosition;
+        SignUpTable.frame = CGRectMake(SignUpTable.frame.origin.x, SignUpTable.frame.origin.y-hightDiff, SignUpTable.frame.size.width, SignUpTable.frame.size.height);
+        [UIView commitAnimations];
+    }
+    else
+    {
+        SignUpTable.frame = CGRectMake(SignUpTable.frame.origin.x, 0, SignUpTable.frame.size.width, SignUpTable.frame.size.height);
+        [UIView commitAnimations];
+    }
+    //    if (!isTableUp) {
+    //        float cellPosition = (cellHight*(textField.tag+1));
+    //
+    //        hightDiffrecne = (cellPosition - keyboardPosition);
+    //        if (hightDiffrecne > 0)
+    //        {
+    //            SignUpTable.frame = CGRectMake(SignUpTable.frame.origin.x, SignUpTable.frame.origin.y-hightDiffrecne, SignUpTable.frame.size.width, SignUpTable.frame.size.height);
+    //            [UIView commitAnimations];
+    //            isTableUp = YES;
+    //        }
+    //    }
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    NSIndexPath *ip = [NSIndexPath indexPathForRow:textField.tag+1 inSection:0];
+    UITextField *nexttextField = (UITextField *)[[[SignUpTable cellForRowAtIndexPath:ip]accessoryView] viewWithTag:textField.tag+1];
+    [nexttextField becomeFirstResponder];
+    return YES;
+>>>>>>> master
 }
 
 - (void)didReceiveMemoryWarning

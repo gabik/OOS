@@ -24,12 +24,16 @@
 
 NSArray *parametersNameArray;
 NSArray *parametersArray;
+<<<<<<< HEAD
 NSMutableArray *valuesArray;
 UIView *datePickerView;
 UIDatePicker *datePicker;
 UIPickerView *pickerView;
 NSDictionary *areaDictionary;
 
+=======
+NSArray *valuesArray;
+>>>>>>> master
 float cellHight;
 float hightDiffrecne;
 float keyboardPosition;
@@ -65,7 +69,10 @@ bool isTableUp;
 }
 -(void)postSignUp
 {
+<<<<<<< HEAD
     [UIView animateWithDuration:0.25f animations:^{datePickerView.frame = CGRectMake(100, 100, self.view.frame.size.width, datePickerView.frame.size.height);}];
+=======
+>>>>>>> master
     //TODO: create valuesArray.
     //
     valuesArray = [[NSMutableArray alloc]init];
@@ -92,6 +99,10 @@ bool isTableUp;
     //BOOL signUpUser = [DAL userSignup:valuesArray parametersArray:parametersNameArray];
   
     
+<<<<<<< HEAD
+=======
+    BOOL signUpUser = [DAL userSignup:valuesArray parametersArray:parametersArray];
+>>>>>>> master
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

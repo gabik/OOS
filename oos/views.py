@@ -101,13 +101,14 @@ def post_work(request):
 					json_data = status.objects.filter(status='OK')
 			else:
 				json_data = status.objects.filter(status='WRN')
-				errors = list(cur_work.errors.items())
+				#errors = list(cur_work.errors.items())
+				errors = str([(k, v[0].__str__()) for k, v in cur_work.errors.items()])
 		else:
 			json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 	else:
 		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 	json_dump = serializers.serialize("json", json_data)
-	json_dump += str(errors)
+	json_dump += errors
 	return HttpResponse(json_dump)
 			
 def post_price(request):
@@ -130,13 +131,14 @@ def post_price(request):
 					json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 			else:
 				json_data = status.objects.filter(status='WRN')
-				errors = list(cur_price.errors.items())
+				#errors = str(cur_price.errors)
+				errors = ",[" + str(dict([(k, v[0].__str__()) for k, v in cur_price.errors.items()])) + "]"
 		else:
 			json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 	else:
 		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 	json_dump = serializers.serialize("json", json_data)
-	json_dump += str(errors)
+	json_dump += errors
 	return HttpResponse(json_dump)
 	#return render_to_response('oos/new_price.html', { 'new_price': cur_price}, context_instance=RequestContext(request))
 			
@@ -164,11 +166,12 @@ def post_pic(request):
 					json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 		else:
 			json_data = status.objects.filter(status='WRN')
-			errors = list(pic_form.errors.items())
+			#errors = list(pic_form.errors.items())
+			errors = str([(k, v[0].__str__()) for k, v in cur_form.errors.items()])
 	#else:
 		#pic_form = new_pic()
 		#return render_to_response('oos/post_pic.html', { 'pic_form': pic_form}, context_instance=RequestContext(request))
 	json_dump = serializers.serialize("json", json_data)
-	json_dump += str(errors)
+	json_dump += errors
 	return HttpResponse(json_dump)
 

@@ -452,6 +452,10 @@
 				2E0D603716DE517600CA3AF3 /* DAL.m in Sources */,
 				2E0D604616E0E18300CA3AF3 /* MoreVC.m in Sources */,
 				2E75425116E115CC00C1A8CB /* ProviderSignup.m in Sources */,
+<<<<<<< HEAD
+=======
+				2EE66B7D16E18EF8001CB1F5 /* UserSignupVC.m in Sources */,
+>>>>>>> master
 				2E3534E416E372D5007D8AFC /* MainMenuVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
