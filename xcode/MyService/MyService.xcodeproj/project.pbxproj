@@ -15,7 +15,7 @@
 		2E0FC2FB16C7F6B100E8442F /* folder_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E0FC2F716C7F6B100E8442F /* folder_blue.png */; };
 		2E0FC2FC16C7F6B100E8442F /* FreeVector-Download-Folder-Icon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2E0FC2F816C7F6B100E8442F /* FreeVector-Download-Folder-Icon.jpg */; };
 		2E0FC2FE16C7F83B00E8442F /* no_icon.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2E0FC2FD16C7F83B00E8442F /* no_icon.gif */; };
-		2E0FC30016C9B1D600E8442F /* MainMenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E0FC2FF16C9B1D600E8442F /* MainMenuVC.m */; };
+		2E3534E416E372D5007D8AFC /* MainMenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E3534E316E372D5007D8AFC /* MainMenuVC.m */; };
 		2E48113016CC62470093AFFE /* Arrow_Down.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E48112E16CC62470093AFFE /* Arrow_Down.png */; };
 		2E48113116CC62470093AFFE /* Arrow_Up.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E48112F16CC62470093AFFE /* Arrow_Up.png */; };
 		2E48113416CCBAB40093AFFE /* RequestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E48113316CCBAB30093AFFE /* RequestVC.m */; };
@@ -81,8 +81,8 @@
 		2E0FC2F716C7F6B100E8442F /* folder_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = folder_blue.png; path = img/folder_blue.png; sourceTree = "<group>"; };
 		2E0FC2F816C7F6B100E8442F /* FreeVector-Download-Folder-Icon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "FreeVector-Download-Folder-Icon.jpg"; path = "img/FreeVector-Download-Folder-Icon.jpg"; sourceTree = "<group>"; };
 		2E0FC2FD16C7F83B00E8442F /* no_icon.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = no_icon.gif; path = img/no_icon.gif; sourceTree = "<group>"; };
-		2E0FC2FF16C9B1D600E8442F /* MainMenuVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainMenuVC.m; path = ../MainMenuVC.m; sourceTree = "<group>"; };
 		2E0FC30116C9B20800E8442F /* MainMenuVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainMenuVC.h; sourceTree = "<group>"; };
+		2E3534E316E372D5007D8AFC /* MainMenuVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuVC.m; sourceTree = "<group>"; };
 		2E48112E16CC62470093AFFE /* Arrow_Down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Arrow_Down.png; path = img/Arrow_Down.png; sourceTree = "<group>"; };
 		2E48112F16CC62470093AFFE /* Arrow_Up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Arrow_Up.png; path = img/Arrow_Up.png; sourceTree = "<group>"; };
 		2E48113216CCBA700093AFFE /* RequestVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RequestVC.h; sourceTree = "<group>"; };
@@ -255,7 +255,7 @@
 				9C052A1316C1630C00C46D69 /* CategoriseVC.m */,
 				2EA8D20216C3062600CF4CA7 /* Globals.h */,
 				2E0FC30116C9B20800E8442F /* MainMenuVC.h */,
-				2E0FC2FF16C9B1D600E8442F /* MainMenuVC.m */,
+				2E3534E316E372D5007D8AFC /* MainMenuVC.m */,
 				9C9725CD16BD73F800600278 /* MainStoryboard_iPhone.storyboard */,
 				2EA8D20916C31A3D00CF4CA7 /* NewRequestVC.h */,
 				2EA8D20A16C31A4D00CF4CA7 /* NewRequestVC.m */,
@@ -446,7 +446,6 @@
 				9C052A0916BE44DB00C46D69 /* ViewControllerCarsD.m in Sources */,
 				9C052A1416C1630C00C46D69 /* CategoriseVC.m in Sources */,
 				2EA8D20B16C31A4D00CF4CA7 /* NewRequestVC.m in Sources */,
-				2E0FC30016C9B1D600E8442F /* MainMenuVC.m in Sources */,
 				2E48113416CCBAB40093AFFE /* RequestVC.m in Sources */,
 				2E48113716CCBCE30093AFFE /* businessCardVC.m in Sources */,
 				9C5B5A3016CD613B00F83A54 /* BusinessNewRequestVC.m in Sources */,
@@ -456,6 +455,7 @@
 				2E0D604616E0E18300CA3AF3 /* MoreVC.m in Sources */,
 				2E75425116E115CC00C1A8CB /* ProviderSignup.m in Sources */,
 				2EE66B7D16E18EF8001CB1F5 /* UserSignupVC.m in Sources */,
+				2E3534E416E372D5007D8AFC /* MainMenuVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
