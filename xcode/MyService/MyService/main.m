@@ -19,6 +19,8 @@ UIColor *globalBgColor;
 UIColor *globalMainTextColor;
 UIColor *globalSeconderyTextColor;
 UIColor *globalPickerTextColor;
+UIColor *globalTableBgColor;
+UIColor *globalTextFieldBgColor;
 
 int main(int argc, char *argv[])
 {

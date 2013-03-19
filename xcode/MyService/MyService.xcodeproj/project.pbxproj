@@ -25,10 +25,9 @@
 		2E4CE62E16C70A2800FF9CFB /* drag_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E4CE62C16C70A2800FF9CFB /* drag_up.png */; };
 		2E75425116E115CC00C1A8CB /* ProviderSignup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75425016E115CC00C1A8CB /* ProviderSignup.m */; };
 		2E75425216E115CC00C1A8CB /* ProviderSignup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75425016E115CC00C1A8CB /* ProviderSignup.m */; };
+		2EA4288316EB78860085F5F0 /* Adidaslogo1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2EA4288216EB78860085F5F0 /* Adidaslogo1.jpg */; };
 		2EA8D20B16C31A4D00CF4CA7 /* NewRequestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EA8D20A16C31A4D00CF4CA7 /* NewRequestVC.m */; };
 		2EBB4B0316CFBCD100A45391 /* RequestCardVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB4B0216CFBCD100A45391 /* RequestCardVC.m */; };
-		2EE66B7D16E18EF8001CB1F5 /* UserSignupVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE66B7C16E18EF7001CB1F5 /* UserSignupVC.m */; };
-		2EE66B7E16E18EF8001CB1F5 /* UserSignupVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE66B7C16E18EF7001CB1F5 /* UserSignupVC.m */; };
 		2EEF6CAF16CDAAE800424E6F /* datePickerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EEF6CAE16CDAAE800424E6F /* datePickerVC.m */; };
 		2EEF6CB116CDCAB900424E6F /* Cisco_Quad.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2EEF6CB016CDCAB900424E6F /* Cisco_Quad.jpg */; };
 		2EEF6CB316CDCB5C00424E6F /* Cisco_Quad.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EEF6CB216CDCB5B00424E6F /* Cisco_Quad.png */; };
@@ -94,13 +93,12 @@
 		2E4CE62C16C70A2800FF9CFB /* drag_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = drag_up.png; path = img/drag_up.png; sourceTree = "<group>"; };
 		2E75424F16E115BE00C1A8CB /* ProviderSignup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProviderSignup.h; sourceTree = "<group>"; };
 		2E75425016E115CC00C1A8CB /* ProviderSignup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProviderSignup.m; sourceTree = "<group>"; };
+		2EA4288216EB78860085F5F0 /* Adidaslogo1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Adidaslogo1.jpg; path = ../../../../Adidaslogo1.jpg; sourceTree = "<group>"; };
 		2EA8D20216C3062600CF4CA7 /* Globals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
 		2EA8D20916C31A3D00CF4CA7 /* NewRequestVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewRequestVC.h; sourceTree = "<group>"; };
 		2EA8D20A16C31A4D00CF4CA7 /* NewRequestVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewRequestVC.m; sourceTree = "<group>"; };
 		2EBB4B0116CFBCD100A45391 /* RequestCardVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestCardVC.h; sourceTree = "<group>"; };
 		2EBB4B0216CFBCD100A45391 /* RequestCardVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestCardVC.m; sourceTree = "<group>"; };
-		2EE66B7B16E18ED1001CB1F5 /* UserSignupVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSignupVC.h; sourceTree = "<group>"; };
-		2EE66B7C16E18EF7001CB1F5 /* UserSignupVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSignupVC.m; sourceTree = "<group>"; };
 		2EEF6CAD16CDAADA00424E6F /* datePickerVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = datePickerVC.h; sourceTree = "<group>"; };
 		2EEF6CAE16CDAAE800424E6F /* datePickerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = datePickerVC.m; sourceTree = "<group>"; };
 		2EEF6CB016CDCAB900424E6F /* Cisco_Quad.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Cisco_Quad.jpg; sourceTree = "<group>"; };
@@ -173,6 +171,7 @@
 		2E4CE62816C7016700FF9CFB /* img */ = {
 			isa = PBXGroup;
 			children = (
+				2EA4288216EB78860085F5F0 /* Adidaslogo1.jpg */,
 				2EEF6CB016CDCAB900424E6F /* Cisco_Quad.jpg */,
 				2E48112E16CC62470093AFFE /* Arrow_Down.png */,
 				2E48112F16CC62470093AFFE /* Arrow_Up.png */,
@@ -273,8 +272,6 @@
 				2E0D604516E0E18300CA3AF3 /* MoreVC.m */,
 				2E75424F16E115BE00C1A8CB /* ProviderSignup.h */,
 				2E75425016E115CC00C1A8CB /* ProviderSignup.m */,
-				2EE66B7B16E18ED1001CB1F5 /* UserSignupVC.h */,
-				2EE66B7C16E18EF7001CB1F5 /* UserSignupVC.m */,
 			);
 			path = MyService;
 			sourceTree = "<group>";
@@ -403,6 +400,7 @@
 				2EEF6CB116CDCAB900424E6F /* Cisco_Quad.jpg in Resources */,
 				2EEF6CB316CDCB5C00424E6F /* Cisco_Quad.png in Resources */,
 				2EEF6CB516CDCB8D00424E6F /* Cisco_Quad2.png in Resources */,
+				2EA4288316EB78860085F5F0 /* Adidaslogo1.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,7 +452,6 @@
 				2E0D603716DE517600CA3AF3 /* DAL.m in Sources */,
 				2E0D604616E0E18300CA3AF3 /* MoreVC.m in Sources */,
 				2E75425116E115CC00C1A8CB /* ProviderSignup.m in Sources */,
-				2EE66B7D16E18EF8001CB1F5 /* UserSignupVC.m in Sources */,
 				2E3534E416E372D5007D8AFC /* MainMenuVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -469,7 +466,6 @@
 				9C5B5A2A16CD5E6C00F83A54 /* BusinessNewRequestVC.m in Sources */,
 				2E0D604716E0E18300CA3AF3 /* MoreVC.m in Sources */,
 				2E75425216E115CC00C1A8CB /* ProviderSignup.m in Sources */,
-				2EE66B7E16E18EF8001CB1F5 /* UserSignupVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

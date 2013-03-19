@@ -31,7 +31,7 @@
 @synthesize SwipeLabel;
 @synthesize infoArray;
 
-
+UIDatePicker *datePicker;
 UIImage *dragUpImage;
 UIImage *dragDownImage;
 NSDictionary *theDictionary;
@@ -53,11 +53,15 @@ const int SWIPE_UP_HIGHT = 30;
     [self.view setBackgroundColor:globalBgColor];
     //MARK: End colorize
     
+    //init datePicker
+    datePicker = [[UIDatePicker alloc]init];
+    
+    //hide views
     swiped = NO;
     [secondView setHidden:YES];
     [infoPicker setHidden:YES];
-    // get the infoTable fields from server
     
+    // get the infoTable fields from server
     theDictionary= [DAL GetChildNamesAndIDs:globalCategoryID];
     infoArray = [theDictionary keysSortedByValueUsingSelector:@selector(compare:)];
 
@@ -127,6 +131,7 @@ const int SWIPE_UP_HIGHT = 30;
     [alert show];
     
     //send information to server
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 

@@ -3,9 +3,6 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "-[ViewController SignIn]:ViewController.m">
-      </ContextState>
-      <ContextState
          contextName = "+[DAL Login:password:]:DAL.m">
          <PersistentStrings>
             <PersistentString
@@ -14,10 +11,21 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "-[ViewController SignIn]:ViewController.m">
+      </ContextState>
+      <ContextState
          contextName = "-[CategoriesVC viewDidLoad]:CategoriseVC.m">
          <PersistentStrings>
             <PersistentString
                value = "globalCategoryID">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ProviderSignup textFieldShouldReturn:]:ProviderSignup.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[textField tag]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

@@ -10,11 +10,14 @@
 
 @interface ViewController : UIViewController <UIGestureRecognizerDelegate, UITextFieldDelegate>;
 
-- (IBAction)signUp:(id)sender;
 - (IBAction)SignIn;
+- (IBAction)ProviderSignup:(id)sender;
+- (IBAction)signUp:(id)sender;
+
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapRecognizer;
 @property (strong, nonatomic) IBOutlet UITableView *signInTable;
+@property (strong, nonatomic) IBOutlet UIButton *signInButton;
+@property (strong, nonatomic) IBOutlet UIButton *forgotPasswordButton;
 @property (strong, nonatomic) IBOutlet UIButton *ProviderSignupButton;
-- (IBAction)ProviderSignup:(id)sender;
-@property (strong, nonatomic) IBOutlet UIButton *signIn;
+@property (strong, nonatomic) IBOutlet UIButton *userSignUpButton;
 @end

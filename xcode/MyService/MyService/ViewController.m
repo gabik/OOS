@@ -12,16 +12,19 @@
 #import "DAL.h"
 #import "ProviderSignup.h"
 #import "UserSignupVC.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface ViewController ()
 
 @end
 
 @implementation ViewController
-@synthesize signIn;
+@synthesize signInButton;
 @synthesize signInTable;
 @synthesize tapRecognizer;
 @synthesize ProviderSignupButton;
+@synthesize forgotPasswordButton;
+@synthesize userSignUpButton;
 
 
 NSArray *signInArray;
@@ -35,18 +38,26 @@ NSString *password;
     
     //MARK: color initiatig
     
-    globalBgColor = [[UIColor alloc] initWithRed:245.0/255.0 green:230.0/255.0 blue:255.0/255.0 alpha:0.85];
+    globalBgColor = [[UIColor alloc] initWithRed:238.0/255.0 green:227.0/255.0 blue:129.0/255.0 alpha:1.0];
     globalMainTextColor= [[UIColor alloc] initWithRed:100.0/255.0 green:100.0/255.0 blue:100.0/255.0 alpha:0.85];
     globalSeconderyTextColor= [[UIColor alloc] initWithRed:165.0/255.0 green:130.0/255.0 blue:205.0/255.0 alpha:0.85];
     globalPickerTextColor= [[UIColor alloc] initWithRed:165.0/255.0 green:130.0/255.0 blue:205.0/255.0 alpha:0.85];
-    
+    globalTableBgColor = [[UIColor alloc] initWithRed:250.0/255.0 green:250.0/255.0 blue:250.0/255.0 alpha:1];
+    globalTextFieldBgColor = [[UIColor alloc]initWithRed:1 green:1 blue:1 alpha:0.4];
     //MARK: End coloe init
     
     //MARK: coloring
     [signInTable setBackgroundColor:[UIColor clearColor]];
     [self.view setBackgroundColor:globalBgColor];
-    signIn.titleLabel.textColor = globalMainTextColor;
-    ProviderSignupButton.titleLabel.textColor = globalMainTextColor;
+    signInButton.titleLabel.textColor = globalMainTextColor;
+    [signInButton setTitleColor:globalTextFieldBgColor forState:UIControlStateNormal];
+    signInButton.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.2];
+    signInButton.layer.borderColor = [UIColor blackColor].CGColor;
+    signInButton.layer.borderWidth = 0.0f;
+    signInButton.layer.cornerRadius = 10.0f;
+    [ProviderSignupButton setTitleColor:globalMainTextColor forState:UIControlStateNormal];
+    [userSignUpButton setTitleColor:globalMainTextColor forState:UIControlStateNormal];
+
     //MARK: end coloring
 	// Do any additional setup after loading the view, typically from a nib.
     
@@ -82,12 +93,6 @@ NSString *password;
     }
 }
 
-- (IBAction)signUp:(id)sender
-{
-    UserSignupVC *newUserSignup = [self.storyboard instantiateViewControllerWithIdentifier:@"userSignupVC"];
-    [self.navigationController pushViewController:newUserSignup animated:YES];
-}
-
 - (IBAction)SignIn {
     //check authontiaction with server.
     
@@ -98,32 +103,10 @@ NSString *password;
     txtField = (UITextField *)[[[signInTable cellForRowAtIndexPath:ip]accessoryView] viewWithTag:1];
     password = txtField.text;
     
-//    NSString * post = [[NSString alloc] initWithFormat:@"&username=%@&password=%@",userName,password];
-//    NSData * postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:NO];
-//    NSString * postLength = [NSString stringWithFormat:@"%d",[postData length]];
-//    NSMutableURLRequest * request = [[NSMutableURLRequest alloc] init];
-//    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://ws.kazav.net/account/login/"]]];
-//    [request setHTTPMethod:@"POST"];
-//    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-//    //[request setValue:password forKey:@"password"];
-//    //[request setValue:userName forKey:@"username"];
-//    [request setHTTPBody:postData];
-//    NSURLConnection * conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-//    
-//    
-//    
-//    if (conn) NSLog(@"Connection Successful");
-    
-
-    //DAL *dal = [[DAL alloc]init];
     BOOL authunticated = NO;
     authunticated = [DAL Login:userName password:password];;
     if (authunticated)
     {
-        //get userIsClient from server
-        //get userId from server.
-        //set globalUserId as user_id.
         globalUserID = 111;
         globalUserName = userName;
         
@@ -141,7 +124,7 @@ NSString *password;
     }
     else
     {
-        
+        [forgotPasswordButton setHidden:NO];
     }
 }
 
@@ -179,18 +162,14 @@ NSString *password;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
     if (cell == nil) {
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MyIdentifier];
-//        cell.selectionStyle = UITableViewCellSelectionStyleGray;
-//        cell.textLabel.textAlignment = NSTextAlignmentCenter;
-//        cell.textLabel.textColor = [UIColor grayColor];
-//        cell.textLabel.font = [UIFont systemFontOfSize:14];
-//        cell.textLabel.text = [signInArray objectAtIndex:indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width-75, cell.frame.size.height-20)];
         textField.placeholder = [signInArray objectAtIndex:indexPath.row];
-        //textField.text = [signInArray objectAtIndex:indexPath.row];
         textField.tag = indexPath.row;
         textField.delegate = self;
         [textField setReturnKeyType:UIReturnKeyDone];
+        [textField setAutocorrectionType:UITextAutocorrectionTypeNo];
+        [textField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         if (indexPath.row == 1) { [textField setSecureTextEntry:YES]; }
         cell.accessoryView = textField;
     }
@@ -210,10 +189,16 @@ NSString *password;
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)ProviderSignup:(id)sender {
+- (IBAction)ProviderSignup:(id)sender
+{
     ProviderSignup *ProviderSignupVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ProviderSignupVC"];
+    [ProviderSignupVC setIsClient:NO];
     [self.navigationController pushViewController:ProviderSignupVC animated:YES];
-    
-    
+}
+- (IBAction)signUp:(id)sender
+{
+    ProviderSignup *newUserSignup = [self.storyboard instantiateViewControllerWithIdentifier:@"ProviderSignupVC"];
+    [newUserSignup setIsClient:YES];
+    [self.navigationController pushViewController:newUserSignup animated:YES];
 }
 @end

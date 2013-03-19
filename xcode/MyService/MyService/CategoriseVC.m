@@ -37,25 +37,8 @@ NSDictionary *categoryDictionary;
     
     categoryDictionary = [DAL GetChildNamesAndIDs:0];
     categoryArray = [categoryDictionary keysSortedByValueUsingSelector:@selector(compare:)];
-    //categoryArray = [[categoryDictionary allKeys] sortedArrayUsingSelector: @selector(compare:)];
-    
-//    [self loadView];
-//    NSString *newString = [NSString stringWithFormat:@"%d",globalUserID];
-//    UIAlertView* mes=[[UIAlertView alloc] initWithTitle:newString
-//                                                message:newString delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
-//    
-//    [mes show];
 }
-//- (void)loadView
-//{
-//    UITableView *tableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStylePlain];
-//    tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-//    tableView.delegate = self;
-//    tableView.dataSource = self;
-//    [tableView reloadData];
-//    
-//    self.view = tableView;
-//}
+
 -(void)viewDidAppear:(BOOL)animated
 {
     //setup default EndDate.

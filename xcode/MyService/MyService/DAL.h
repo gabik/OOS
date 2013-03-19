@@ -11,9 +11,9 @@
 
 +(BOOL)Login:(NSString *)userName password:(NSString *)password;
 +(BOOL)isUserIsClient;
-+(BOOL*)userSignup:(NSArray *) userDetailsArray parametersArray:(NSArray *)parametersArray;
-+(BOOL*)provSignup:(NSArray *) SignUpArray parametersArray:(NSArray *)parametersArray;
++(BOOL*)Signup:(NSArray *) userDetailsArray parametersArray:(NSArray *)parametersArray postTo:(NSString *)postTo;
 +(NSArray*)GetChiled:(NSInteger)parent_ID;
 +(NSDictionary*)GetChildNamesAndIDs:(NSInteger)parent_ID;
++(BOOL)submitNewRequest:(NSDictionary *)newRequest;
 @end
 

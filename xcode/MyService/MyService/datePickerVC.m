@@ -36,6 +36,14 @@
     dateFromString = [dateFormatter dateFromString:userEndDate];
     [datePicker setDate:dateFromString];
     
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
+    [offsetComponents setYear:1];
+    NSDate *maxDate = [gregorian dateByAddingComponents:offsetComponents toDate:[NSDate date] options:0];
+
+    [datePicker setMaximumDate:maxDate];
+    [datePicker setMinimumDate:[NSDate date]];
+    
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
                                                                     style:UIBarButtonSystemItemDone target:self action:@selector(backToNewRequestVC)];
     self.navigationItem.rightBarButtonItem = rightButton;

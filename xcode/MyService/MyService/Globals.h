@@ -16,6 +16,8 @@ extern NSString *globalSystemLanguage;
 extern NSMutableArray *globalCategoryArray;
 extern NSString *userEndDate;
 extern UIColor *globalBgColor;
+extern UIColor *globalTableBgColor;
+extern UIColor *globalTextFieldBgColor;
 extern UIColor *globalMainTextColor;
 extern UIColor *globalSeconderyTextColor;
 extern UIColor *globalPickerTextColor;

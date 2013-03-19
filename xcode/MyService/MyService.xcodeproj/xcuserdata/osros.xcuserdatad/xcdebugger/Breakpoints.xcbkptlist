@@ -7,13 +7,39 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383831470.522345"
+         filePath = "MyService/ProviderSignup.m"
+         timestampString = "384573544.203897"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "11"
-         endingLineNumber = "11"
-         landmarkName = "+Login:password:"
+         startingLineNumber = "46"
+         endingLineNumber = "46"
+         landmarkName = "-viewDidLoad"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "MyService/ProviderSignup.m"
+         timestampString = "384573544.203897"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "161"
+         endingLineNumber = "161"
+         landmarkName = "-tableView:cellForRowAtIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "MyService/ProviderSignup.m"
+         timestampString = "384573544.203897"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "69"
+         endingLineNumber = "69"
+         landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -21,194 +47,51 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
+         timestampString = "385406911.091609"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "119"
-         endingLineNumber = "119"
-         landmarkName = "+isUserIsClient"
+         startingLineNumber = "197"
+         endingLineNumber = "197"
+         landmarkName = "+Signup:parametersArray:postTo:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "No"
+         shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
+         timestampString = "385406915.085757"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "91"
-         endingLineNumber = "91"
-         landmarkName = "+isUserIsClient"
+         startingLineNumber = "199"
+         endingLineNumber = "199"
+         landmarkName = "+Signup:parametersArray:postTo:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "95"
-         endingLineNumber = "95"
-         landmarkName = "+isUserIsClient"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "94"
-         endingLineNumber = "94"
-         landmarkName = "+isUserIsClient"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383846394.843186"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "29"
-         endingLineNumber = "29"
-         landmarkName = "+Login:password:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "124"
-         endingLineNumber = "124"
-         landmarkName = "+isUserIsClient"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "92"
-         endingLineNumber = "92"
-         landmarkName = "+isUserIsClient"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "94"
-         endingLineNumber = "94"
-         landmarkName = "+isUserIsClient"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "98"
-         endingLineNumber = "98"
-         landmarkName = "+isUserIsClient"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/ViewController.m"
-         timestampString = "383881539.791188"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "130"
-         endingLineNumber = "130"
-         landmarkName = "-SignIn"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "110"
-         endingLineNumber = "110"
-         landmarkName = "+isUserIsClient"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "101"
-         endingLineNumber = "101"
-         landmarkName = "+isUserIsClient"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "106"
-         endingLineNumber = "106"
-         landmarkName = "+isUserIsClient"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "107"
-         endingLineNumber = "107"
-         landmarkName = "+isUserIsClient"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
+         filePath = "MyService/ProviderSignup.m"
+         timestampString = "385408834.242195"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "109"
          endingLineNumber = "109"
-         landmarkName = "+isUserIsClient"
+         landmarkName = "-postSignUp"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "MyService/ProviderSignup.m"
+         timestampString = "385408952.003897"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "132"
+         endingLineNumber = "132"
+         landmarkName = "-postSignUp"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -216,12 +99,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "MyService/DAL.m"
-         timestampString = "383876766.570969"
+         timestampString = "385409015.941686"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "108"
-         endingLineNumber = "108"
-         landmarkName = "+isUserIsClient"
+         startingLineNumber = "177"
+         endingLineNumber = "177"
+         landmarkName = "+Signup:parametersArray:postTo:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "MyService/ProviderSignup.m"
+         timestampString = "385410293.808229"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "122"
+         endingLineNumber = "122"
+         landmarkName = "-postSignUp"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -229,12 +125,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "MyService/DAL.m"
-         timestampString = "383925499.373291"
+         timestampString = "385410359.751856"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "178"
-         endingLineNumber = "178"
-         landmarkName = "+userSignup:parametersArray:"
+         startingLineNumber = "175"
+         endingLineNumber = "175"
+         landmarkName = "+Signup:parametersArray:postTo:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -242,12 +138,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "MyService/DAL.m"
-         timestampString = "384005607.746417"
+         timestampString = "385410378.899308"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "179"
-         endingLineNumber = "179"
-         landmarkName = "+userSignup:parametersArray:"
+         startingLineNumber = "186"
+         endingLineNumber = "186"
+         landmarkName = "+Signup:parametersArray:postTo:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
