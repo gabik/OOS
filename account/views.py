@@ -71,16 +71,15 @@ def create_P_user(request):
 			json_data = status.objects.filter(status='OK')
 		else:
 			json_data = status.objects.filter(status='WRN')
-			#errors = list(userprofile_form.errors.items()) + list(user_form.errors.items())
-			#errors = str([(k, v[0].__str__()) for k, v in userprofile_form.errors.items()])
-			errors = ",[" + str(dict([(k, v[0].__str__()) for k, v in user_form.errors.items()])) + "]"
-			#errors += str([(k, v[0].__str__()) for k, v in user_form.errors.items()])
-			errors += ",[" + str(dict([(k, v[0].__str__()) for k, v in userprofile_form.errors.items()])) + "]"
+			if user_form.errors.items() : 
+				errors = ",[" + str(dict([(k, v[0].__str__()) for k, v in user_form.errors.items()])) + "]"
+			if userprofile_form.errors.items():
+				errors += ",[" + str(dict([(k, v[0].__str__()) for k, v in userprofile_form.errors.items()])) + "]"
 	else:
 		json_data=list(status.objects.filter(status='ERR',MSG='PD')) 
-	json_dump = serializers.serialize("json", json_data)
-	json_dump += errors
-	return HttpResponse(json_dump)
+	json_dump = "[" + serializers.serialize("json", json_data)
+	json_dump += errors + "]"
+	return HttpResponse(json_dump.replace('\'','"'))
 
 def create_P_user2(request):
 	json_dump = json.dumps({'status': "ERR"})
@@ -158,8 +157,6 @@ def create_P_provider(request):
 			userprofile.area_id = userprofile_form.cleaned_data['area_id']
 			userprofile.hash = hashlib.sha224("OOS" + created_user.username + created_user.email).hexdigest()
 			userprofile.save()
-			#new_user = authenticate(username=request.POST['username'], password=request.POST['password1'])
-			#login(request, new_user)
 			subject = "new provider notice"
 			accept_link = 'http://ws.kazav.net/account/accept_prov/' + str(created_user.id) + '/' + userprofile.hash + '/'
 			reject_link = 'http://ws.kazav.net/account/reject_prov/' + str(created_user.id) + '/' + userprofile.hash + '/'
@@ -173,13 +170,12 @@ def create_P_provider(request):
 			json_data = status.objects.filter(status='OK')
 		else:
 			json_data = status.objects.filter(status='WRN')
-			#errors = list(userprofile_form.errors.items()) + list(user_form.errors.items())
-			errors = str([(k, v[0].__str__()) for k, v in userprofile_form.errors.items()])
-			errors += str([(k, v[0].__str__()) for k, v in user_form.errors.items()])
+			errors = ",[" + str(dict([(k, v[0].__str__()) for k, v in user_form.errors.items()])) + "]"
+			errors += ",[" + str(dict([(k, v[0].__str__()) for k, v in userprofile_form.errors.items()])) + "]"
 	else:
 		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
-	json_dump = serializers.serialize("json", json_data)
-	json_dump += errors
+	json_dump = "[" + serializers.serialize("json", json_data)
+	json_dump += errors + "]"
 	return HttpResponse(json_dump)
 
 def accept_prov(requesti, UserId, UserHash):
