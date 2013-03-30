@@ -81,6 +81,24 @@ def create_P_user(request):
 	json_dump += errors + "]"
 	return HttpResponse(json_dump.replace('\'','"'))
 
+def get_P_profile(request):
+	json_data=status.objects.filter(status='ERR',MSG=None)
+	userprofile = UserProfile.objects.get(user=request.user)
+	userdata = {}
+	userdata['phone_num1'] = str(userprofile.phone_num1)
+	userdata['phone_num2'] = str(userprofile.phone_num2)
+	userdata['address'] = str(userprofile.address)
+	if userprofile.birthday : 
+		userdata['birthday'] = str(userprofile.birthday)
+	else : 
+		userdata['birthday'] = ""
+	userdata['area_id'] = str(userprofile.area_id.id)
+	userdump = str(userdata)
+	json_data = status.objects.filter(status='OK')
+	json_dump = "[" + serializers.serialize("json", json_data)
+	json_dump += ",[" + userdump + "]]"
+	return HttpResponse(json_dump.replace('\'','"'))
+
 def create_P_user2(request):
 	json_dump = json.dumps({'status': "ERR"})
 	if request.method == 'POST':
@@ -176,7 +194,30 @@ def create_P_provider(request):
 		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 	json_dump = "[" + serializers.serialize("json", json_data)
 	json_dump += errors + "]"
-	return HttpResponse(json_dump)
+	return HttpResponse(json_dump.replace('\'','"'))
+
+def update_P_profile(request):
+	json_data=status.objects.filter(status='ERR',MSG=None)
+	errors=""
+	if request.method == 'POST':
+		userprofile_form = UserProfileForm(request.POST, instance=request.user)
+		userprofile_old = UserProfile.objects.get(user=request.user)
+		if userprofile_form.is_valid() :
+			userprofile_old.phone_num1 = userprofile_form.cleaned_data['phone_num1']
+			userprofile_old.phone_num2 = userprofile_form.cleaned_data['phone_num2']
+			userprofile_old.address = userprofile_form.cleaned_data['address']
+			userprofile_old.birthday = userprofile_form.cleaned_data['birthday']
+			userprofile_old.area_id = userprofile_form.cleaned_data['area_id']
+			userprofile_old.save()
+			json_data = status.objects.filter(status='OK')
+		else:
+			json_data = status.objects.filter(status='WRN')
+			errors += ",[" + str(dict([(k, v[0].__str__()) for k, v in userprofile_form.errors.items()])) + "]"
+	else:
+		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+	json_dump = "[" + serializers.serialize("json", json_data)
+	json_dump += errors + "]"
+	return HttpResponse(json_dump.replace('\'','"'))
 
 def accept_prov(requesti, UserId, UserHash):
 	msg = "Error... unknowd.. Shit.."
