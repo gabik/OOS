@@ -81,10 +81,23 @@ def create_P_user(request):
 	json_dump += errors + "]"
 	return HttpResponse(json_dump.replace('\'','"'))
 
+def get_P_email(request):
+	json_data=status.objects.filter(status='ERR',MSG=None)
+	userdata = {}
+	userdata['email'] = str(request.user.email)
+	userdump = str(userdata)
+	json_data = status.objects.filter(status='OK')
+	json_dump = "[" + serializers.serialize("json", json_data)
+	json_dump += ",[" + userdump + "]]"
+	return HttpResponse(json_dump.replace('\'','"'))
+
+
 def get_P_profile(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	userprofile = UserProfile.objects.get(user=request.user)
 	userdata = {}
+	userdata['firstname'] = str(request.user.first_name)
+	userdata['lastname'] = str(request.user.last_name)
 	userdata['phone_num1'] = str(userprofile.phone_num1)
 	userdata['phone_num2'] = str(userprofile.phone_num2)
 	userdata['address'] = str(userprofile.address)
