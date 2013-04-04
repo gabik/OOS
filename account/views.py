@@ -240,6 +240,29 @@ def update_P_profile(request):
 	json_dump += errors + "]"
 	return HttpResponse(json_dump.replace('\'','"'))
 
+def change_P_pass(request):
+	json_data=status.objects.filter(status='ERR',MSG=None)
+	errors={}
+	if request.method == 'POST':
+		if request.POST['password1'] == request.POST['password2'] : 
+			if len(request.POST['password1']) >= 6 :
+				user_old = request.user
+				user_old.set_password(request.POST['password1'])
+				user_old.save()
+				json_data = status.objects.filter(status='OK')
+			else:
+				json_data = status.objects.filter(status='WRN')
+				errors['password'] = ["min 6 chars"]
+		else:
+			json_data = status.objects.filter(status='WRN')
+			errors['password'] = ["no match"]
+	else:
+		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+	errors = ",[" + str(dict([(k, v[0].__str__()) for k, v in errors.items()])) + "]"
+	json_dump = "[" + serializers.serialize("json", json_data)
+	json_dump += errors + "]"
+	return HttpResponse(json_dump.replace('\'','"'))
+
 def accept_prov(requesti, UserId, UserHash):
 	msg = "Error... unknowd.. Shit.."
 	cur_user = User.objects.filter(id=UserId)
