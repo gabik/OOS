@@ -53,3 +53,8 @@ class ProvProfileForm(ModelForm):
 	class Meta:
 		model = UserProfile
 		exclude = ('user', 'is_client', 'hash')
+
+class UpdateUserForm(ModelForm):
+	class Meta:
+		model = User
+		fields = ('first_name', 'last_name', 'email' )

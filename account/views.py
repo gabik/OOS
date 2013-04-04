@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from account.forms import UserForm, UserProfileForm, AgreeForm, ProvProfileForm
+from account.forms import UserForm, UserProfileForm, AgreeForm, ProvProfileForm, UpdateUserForm
 from django.template import RequestContext
 from django.utils import simplejson as json
 from account.models import status, area, UserProfile
@@ -98,6 +98,7 @@ def get_P_profile(request):
 	userdata = {}
 	userdata['firstname'] = str(request.user.first_name)
 	userdata['lastname'] = str(request.user.last_name)
+	userdata['email'] = str(request.user.email)
 	userdata['phone_num1'] = str(userprofile.phone_num1)
 	userdata['phone_num2'] = str(userprofile.phone_num2)
 	userdata['address'] = str(userprofile.address)
@@ -213,18 +214,25 @@ def update_P_profile(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	errors=""
 	if request.method == 'POST':
+		user_form = UpdateUserForm(request.POST, instance=request.user)
 		userprofile_form = UserProfileForm(request.POST, instance=request.user)
 		userprofile_old = UserProfile.objects.get(user=request.user)
-		if userprofile_form.is_valid() :
+		user_old = request.user
+		if userprofile_form.is_valid() and user_form.is_valid() :
 			userprofile_old.phone_num1 = userprofile_form.cleaned_data['phone_num1']
 			userprofile_old.phone_num2 = userprofile_form.cleaned_data['phone_num2']
 			userprofile_old.address = userprofile_form.cleaned_data['address']
 			userprofile_old.birthday = userprofile_form.cleaned_data['birthday']
 			userprofile_old.area_id = userprofile_form.cleaned_data['area_id']
 			userprofile_old.save()
+			user_old.first_name = user_form.cleaned_data['firstname']
+			user_old.last_name = user_form.cleaned_data['lastname']
+			user_old.email = user_form.cleaned_data['email']
+			user_old.save()
 			json_data = status.objects.filter(status='OK')
 		else:
 			json_data = status.objects.filter(status='WRN')
+			errors = ",[" + str(dict([(k, v[0].__str__()) for k, v in user_form.errors.items()])) + "]"
 			errors += ",[" + str(dict([(k, v[0].__str__()) for k, v in userprofile_form.errors.items()])) + "]"
 	else:
 		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
