@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response, get_object_or_404, get_list_or_
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from account.forms import UserForm, UserProfileForm, AgreeForm, ProvProfileForm, UpdateUserForm
+from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.utils import simplejson as json
 from account.models import status, area, UserProfile
@@ -81,6 +82,7 @@ def create_P_user(request):
 	json_dump += errors + "]"
 	return HttpResponse(json_dump.replace('\'','"'))
 
+@login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_P_email(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	userdata = {}
@@ -91,7 +93,7 @@ def get_P_email(request):
 	json_dump += ",[" + userdump + "]]"
 	return HttpResponse(json_dump.replace('\'','"'))
 
-
+@login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_P_profile(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	userprofile = UserProfile.objects.get(user=request.user)
@@ -210,6 +212,7 @@ def create_P_provider(request):
 	json_dump += errors + "]"
 	return HttpResponse(json_dump.replace('\'','"'))
 
+@login_required(login_url='/account/logout/', redirect_field_name=None)
 def update_P_profile(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	errors=""
@@ -240,6 +243,7 @@ def update_P_profile(request):
 	json_dump += errors + "]"
 	return HttpResponse(json_dump.replace('\'','"'))
 
+@login_required(login_url='/account/logout/', redirect_field_name=None)
 def change_P_pass(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	errors={}
