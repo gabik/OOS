@@ -1,4 +1,4 @@
-from django.contrib.auth.views import login, logout, password_reset_confirm
+from django.contrib.auth.views import login, logout, password_reset_confirm, password_reset
 from django.conf.urls.defaults import *
 from account import views
 
@@ -14,6 +14,9 @@ urlpatterns = patterns('account.views',
 	(r'^Pcng_pass/$', 'change_P_pass'),
 	(r'^logout/$', logout),
 	(r'^is_login/$', 'is_login'),
+	(r'^resetPWD/$', 'reset_P_password'),
+	(r'^resetaccept/(?P<UserId>\d+)/(?P<UserHash>\w+)/$', 'reset_pass_link'),
+	(r'^reset_pass_do/$', 'reset_pass_do'),
 	(r'^accept_prov/(?P<UserId>\d+)/(?P<UserHash>\w+)/$', 'accept_prov'),
 	(r'^reject_prov/(?P<UserId>\d+)/(?P<UserHash>\w+)/$', 'reject_prov'),
 	#(r'^unsubscribe/(?P<guestHash>\w+)/$', 'unsubscribe'),

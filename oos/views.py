@@ -53,6 +53,17 @@ def get_work(request):
 	return HttpResponse(json_dump)
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
+def get_works(request):
+  json_data = status.objects.filter(status='ERR', MSG='NE')
+  json_dump = serializers.serialize("json", json_data)
+  all_work = work.objects.filter(client_user=request.user)
+  if not all_work:
+    return HttpResponse(json_dump)
+  json_data = list(status.objects.filter(status='OK')) + list(all_work) 
+  json_dump = serializers.serialize("json", json_data)
+  return HttpResponse(json_dump)
+
+@login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_user(request):
 	json_data = status.objects.filter(status='ERR',MSG='NE')
 	json_dump = serializers.serialize("json", json_data)

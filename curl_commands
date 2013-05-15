@@ -10,3 +10,4 @@ curl -b /tmp/cookie -d "work_id=3" http://ws.kazav.net/oos/post_pic/ --data-bina
 curl -b /tmp/cookie_prov -d"username=prov2&email=11@23111.com&password1=11111&password2=11111&phone_num1=765432&phone_num2=&address=hahahaddress&birthday=&area_id=1&firstname=gabi&lastname=kazav" http://ws.kazav.net/account/Pupdate_prov/
 curl -b /tmp/cookie_prov http://ws.kazav.net/account/Pget_profile/
 curl -b /tmp/cookie_prov -d "password1=123456789&"password2=123456789" http://ws.kazav.net/account/Pcng_pass/
+curl -b /tmp/cookie_prov -d"email=11@23111.com&phone_num1=765432&phone_num2=&address=hahahaddress&birthday=&area_id=1&first_name=gabi&last_name=kazav" http://ws.kazav.net/account/Pupdate_prof/

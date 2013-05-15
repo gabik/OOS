@@ -98,8 +98,8 @@ def get_P_profile(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	userprofile = UserProfile.objects.get(user=request.user)
 	userdata = {}
-	userdata['firstname'] = str(request.user.first_name)
-	userdata['lastname'] = str(request.user.last_name)
+	userdata['first_name'] = str(request.user.first_name)
+	userdata['last_name'] = str(request.user.last_name)
 	userdata['email'] = str(request.user.email)
 	userdata['phone_num1'] = str(userprofile.phone_num1)
 	userdata['phone_num2'] = str(userprofile.phone_num2)
@@ -228,8 +228,8 @@ def update_P_profile(request):
 			userprofile_old.birthday = userprofile_form.cleaned_data['birthday']
 			userprofile_old.area_id = userprofile_form.cleaned_data['area_id']
 			userprofile_old.save()
-			user_old.first_name = user_form.cleaned_data['firstname']
-			user_old.last_name = user_form.cleaned_data['lastname']
+			user_old.first_name = user_form.cleaned_data['first_name']
+			user_old.last_name = user_form.cleaned_data['last_name']
 			user_old.email = user_form.cleaned_data['email']
 			user_old.save()
 			json_data = status.objects.filter(status='OK')
@@ -262,7 +262,10 @@ def change_P_pass(request):
 			errors['password'] = ["no match"]
 	else:
 		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
-	errors = ",[" + str(dict([(k, v[0].__str__()) for k, v in errors.items()])) + "]"
+	if errors.items():
+		errors = ",[" + str(dict([(k, v[0].__str__()) for k, v in errors.items()])) + "]"
+	else:
+		errors = ""	
 	json_dump = "[" + serializers.serialize("json", json_data)
 	json_dump += errors + "]"
 	return HttpResponse(json_dump.replace('\'','"'))
@@ -344,3 +347,87 @@ def check_area(higher, lower):
 		else:
 			answer = False
 	return answer
+
+def reset_P_password(request):
+	json_data=status.objects.filter(status='ERR',MSG=None)
+	errors=""
+	if request.method == 'POST':
+		user_mail = request.POST['email']
+		user = User.objects.filter(email=user_mail)
+		if user : 
+			userprof = UserProfile.objects.get(user=user[0])
+			userprof.hash = hashlib.sha224("PWD" + user[0].username + user[0].email).hexdigest()
+			userprof.save()
+			subject = "Reset Password"
+			accept_link = 'http://ws.kazav.net/account/resetaccept/' + str(request.user.id) + '/' + userprof.hash + '/'
+			html_message = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">We got a request to reset your password.<BR> <a href="' + accept_link + '"> Click Here To Reset Your Password </a>'
+			text_message = 'We got a request to reset your password. please go to ' + accept_link + ' in order to do it.'
+			msg = EmailMultiAlternatives(subject, text_message, 'OOS Server<contact@oos.com>', [user_mail])
+			msg.attach_alternative(html_message,"text/html")
+			msg.send()
+			json_data = status.objects.filter(status='OK')
+		else:
+			json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+	else:
+		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+	json_dump = "[" + serializers.serialize("json", json_data)
+	json_dump += errors + "]"
+	return HttpResponse(json_dump.replace('\'','"'))
+
+def reset_pass_link(request, UserId, UserHash):
+	msg = "Error... unknowd.. Shit.."
+	cur_user = User.objects.filter(id=UserId)
+	if cur_user:
+		cur_profile = UserProfile.objects.filter(user=cur_user[0])
+		if cur_profile:
+			cur_hash = cur_profile[0].hash
+			if UserHash == cur_hash:
+				#msg = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><form action=/account/reset_pass_do/ method=post>Enter New Password:<input type=text name=password_new><input type=hidden name=userid value=' + UserId + '><input type=hidden value=' + UserHash + 'name=userhash><input type=submit>'
+				msg = '''<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<script type="text/javascript"> 
+function pvalidate() 
+{ 
+if ((document.registration.pass1.value != document.registration.pass2.value) || (document.registration.pass1.value == ""))
+{ 
+alert("Passwords did not match!"); 
+return false; 
+} else { 
+document.registration.submit(); 
+return true; 
+} 
+}
+</script> 
+<form action=/account/reset_pass_do/ method=post onsubmit="return pvalidate()" name="registration">Enter New Password:<input type=password name=pass1 id=pass1><BR>Validate Password:<input type=password name=pass2 id=pass2><BR><input type=hidden name=userid value=''' + UserId + '''><input type=hidden value=''' + UserHash + ''' name=userhash><input type="button" onclick="return pvalidate()" value="Submit">  '''
+			else:
+				msg = "Hash do not match... do not fool me!"
+		else:
+			msg = "User has no profile.. check Admin"
+	else:
+		msg = "Unknown User ID.. not exist"
+	return HttpResponse(msg)
+
+def reset_pass_do(request):
+	msg="Error accured.. sorry - contact support"
+	cur_user = User.objects.filter(id=request.POST['userid'])
+	if cur_user:
+		cur_profile = UserProfile.objects.filter(user=cur_user[0])
+		if cur_profile:
+			cur_hash = cur_profile[0].hash
+			if request.POST['userhash'] == cur_hash:
+				cur_profile[0].hash = hashlib.sha224("OOS" + cur_user[0].username + cur_user[0].email).hexdigest()
+				cur_profile[0].save()
+				cur_user[0].set_password(request.POST['pass1'])
+				cur_user[0].save()
+				msg = "Password changed."
+			else:
+				msg = "Hash do not match... do not fool me!"
+		else:
+			msg = "User has no profile.. check Admin"
+	else:
+		msg = "Unknown User ID.. not exist"
+	return HttpResponse(msg)
+
+			
+				
+		
+
