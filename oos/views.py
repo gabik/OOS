@@ -1,4 +1,4 @@
-from oos.models import item, work, pics
+from oos.models import item, work, pics, price
 from oos.forms import new_work, new_price, new_pic
 from account.models import UserProfile, area, status
 from django.utils import simplejson as json
@@ -10,6 +10,15 @@ from django.contrib.auth.models import User
 from django.core import serializers
 from account.views import check_area
 from oos import settings
+
+def get_root_parent(itemid):
+	cur_item = item.objects.filter(id=itemid)
+	if cur_item[0].parent_id == None:
+		answer = cur_item[0].id
+	else:
+		parent = item.objects.filter(id=cur_item[0].parent_id.id)
+		answer = get_root_parent(parent[0].id)
+	return answer
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_child(request):
@@ -54,14 +63,25 @@ def get_work(request):
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_works(request):
-  json_data = status.objects.filter(status='ERR', MSG='NE')
-  json_dump = serializers.serialize("json", json_data)
-  all_work = work.objects.filter(client_user=request.user)
-  if not all_work:
-    return HttpResponse(json_dump)
-  json_data = list(status.objects.filter(status='OK')) + list(all_work) 
-  json_dump = serializers.serialize("json", json_data)
-  return HttpResponse(json_dump)
+	json_data = status.objects.filter(status='ERR', MSG='NE')
+	json_dump = serializers.serialize("json", json_data)
+	all_work = work.objects.filter(client_user=request.user)
+	if not all_work:
+		json_data = status.objects.filter(status='WRN', MSG='EMP')
+		json_dump = serializers.serialize("json", json_data)
+	else:
+		json_data = list(status.objects.filter(status='OK')) 
+		all_works = []
+		for i in all_work:
+			root_parent_name = item.objects.get(id=get_root_parent(i.item.id)).name
+			all_works_dict = {}
+			all_works_dict['pk'] = int(i.id)
+			all_works_dict['model'] = "oos.work"
+			all_works_dict['fields'] = {'item': str(i.item.name), 'root_parent': str(root_parent_name)}
+			all_works.append(all_works_dict)
+			#json_data+= list(all_works_dict) 
+		json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(all_works)) #serializers.serialize("json", json_data)
+	return HttpResponse(json_dump.replace('\'','"').replace('][',','))
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_user(request):
@@ -95,6 +115,7 @@ def get_user(request):
 		json_dump += ']'
 	return HttpResponse(json_dump)
 
+@login_required(login_url='/account/logout/', redirect_field_name=None)
 def post_work(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	errors=""
@@ -122,6 +143,7 @@ def post_work(request):
 	json_dump += errors
 	return HttpResponse(json_dump)
 			
+@login_required(login_url='/account/logout/', redirect_field_name=None)
 def post_price(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	errors=""
@@ -152,13 +174,37 @@ def post_price(request):
 	json_dump += errors
 	return HttpResponse(json_dump)
 	#return render_to_response('oos/new_price.html', { 'new_price': cur_price}, context_instance=RequestContext(request))
-			
+
+@login_required(login_url='/account/logout/', redirect_field_name=None)
+def get_prices(request):
+	json_data=status.objects.filter(status='ERR',MSG=None)
+	json_dump = serializers.serialize("json", json_data)
+	if request.method == 'POST':
+		all_prices = price.objects.filter(work_id=request.POST['work_id'], is_active=True).order_by('price')
+		if all_prices:
+			return_prices = []
+			for i in all_prices:
+				all_price_dict = {}
+				all_price_dict['pk'] = int(i.id)
+				all_price_dict['model'] = "oos.price"
+				all_price_dict['fields'] = {'price': str(i.price), 'provider_user': str(i.provider_user.first_name + " " + i.provider_user.last_name)}
+				return_prices.append(all_price_dict)
+			json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(return_prices)) 
+		else:
+			json_data=list(status.objects.filter(status='WRN',MSG='EMP'))
+			json_dump = serializers.serialize("json", json_data)
+	else:
+		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+		json_dump = serializers.serialize("json", json_data)
+	return HttpResponse(json_dump.replace('\'','"').replace('][',','))
+
 def handle_uploaded_file(file_path):
     dest = open(settings.MEDIA_ROOT + "/work_pics/" + file_path.name,"wb")
     for chunk in file_path.chunks():
         dest.write(chunk)
     dest.close()
 
+@login_required(login_url='/account/logout/', redirect_field_name=None)
 def post_pic(request):
 	json_data=list(status.objects.filter(status='ERR',MSG='NE'))
 	errors=""

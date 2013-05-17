@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
-from oos.views import get_child, get_work, get_user, post_work, post_price, post_pic, get_works
+from oos.views import get_child, get_work, get_user, post_work, post_price, post_pic, get_works, get_prices
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 	(r'^oos/post_work/$', post_work),
 	(r'^oos/post_price/$', post_price),
 	(r'^oos/post_pic/$', post_pic),
+	(r'^oos/get_prices/$', get_prices),
 	(r'^admin/', include(admin.site.urls)),
 	(r'^static/admin/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.ADMIN_MEDIA_ROOT}),
 	(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
