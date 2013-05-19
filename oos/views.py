@@ -62,6 +62,36 @@ def get_work(request):
 	return HttpResponse(json_dump)
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
+def get_BC(request):
+	json_data = status.objects.filter(status='ERR', MSG='NE')
+	json_dump = serializers.serialize("json", json_data)
+	if request.method == 'POST':
+		price_id = request.POST['price_id']
+		if price_id == "" :
+			return HttpResponse(json_dump)
+		cur_price = price.objects.filter(id=price_id)
+		if not cur_price:
+			return HttpResponse(json_dump)
+		user_profile = UserProfile.objects.filter(user=cur_price[0].provider_user)
+		if not user_profile:
+			return HttpResponse(json_dump)
+		returnArray = []
+		BC_dict = {}
+		BC_dict['pk'] = int(cur_price[0].provider_user.id)
+		BC_dict['model'] = "oos.BC"
+		BC_Fields = {}
+		BC_Fields['firstname'] = str(cur_price[0].provider_user.first_name)
+		BC_Fields['lastname'] = str(cur_price[0].provider_user.last_name)
+		BC_Fields['email'] = str(cur_price[0].provider_user.email)
+		BC_Fields['phone_num1'] = str(user_profile[0].phone_num1)
+		BC_Fields['phone_num2'] = str(user_profile[0].phone_num2)
+		BC_Fields['address'] = str(user_profile[0].address)
+		BC_dict['fields'] = BC_Fields
+		returnArray.append(BC_dict)
+		json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(returnArray))
+	return HttpResponse(json_dump.replace('\'','"').replace('][',','))
+
+@login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_works(request):
 	json_data = status.objects.filter(status='ERR', MSG='NE')
 	json_dump = serializers.serialize("json", json_data)
