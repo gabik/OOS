@@ -13,3 +13,5 @@ curl -b /tmp/cookie_prov -d "password1=123456789&"password2=123456789" http://ws
 curl -b /tmp/cookie_prov -d"email=11@23111.com&phone_num1=765432&phone_num2=&address=hahahaddress&birthday=&area_id=1&first_name=gabi&last_name=kazav" http://ws.kazav.net/account/Pupdate_prof/
 curl -b /tmp/cookie -d "work_id=3" http://ws.kazav.net/oos/get_prices/
 curl -b /tmp/cookie http://ws.kazav.net/oos/get_works/
+curl -b /tmp/cookie_prov http://ws.kazav.net/oos/get_prov_works/
+

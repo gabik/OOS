@@ -1,4 +1,5 @@
-from oos.models import item, work, pics, price
+import datetime
+from oos.models import item, work, pics, price, hidden_works
 from oos.forms import new_work, new_price, new_pic
 from account.models import UserProfile, area, status
 from django.utils import simplejson as json
@@ -86,6 +87,9 @@ def get_BC(request):
 		BC_Fields['phone_num1'] = str(user_profile[0].phone_num1)
 		BC_Fields['phone_num2'] = str(user_profile[0].phone_num2)
 		BC_Fields['address'] = str(user_profile[0].address)
+		BC_Fields['price'] = str(cur_price[0].price)
+		BC_Fields['text'] = str(cur_price[0].text)
+		BC_Fields['post_date'] = str(cur_price[0].post_date.strftime("%d-%m-%Y %H:%M"))
 		BC_dict['fields'] = BC_Fields
 		returnArray.append(BC_dict)
 		json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(returnArray))
@@ -262,3 +266,40 @@ def post_pic(request):
 	json_dump += errors
 	return HttpResponse(json_dump)
 
+@login_required(login_url='/account/logout/', redirect_field_name=None)
+def provider_works(request):
+	json_data=status.objects.filter(status='ERR',MSG=None)
+	json_dump = serializers.serialize("json", json_data)
+	user_profile = UserProfile.objects.filter(user=request.user)
+	if not user_profile:
+		json_data=status.objects.filter(status='ERR',MSG='PD')
+		json_dump = serializers.serialize("json", json_data)
+		return HttpResponse(json_dump)
+	if user_profile[0].is_client:
+		json_data=status.objects.filter(status='ERR',MSG='PD')
+		json_dump = serializers.serialize("json", json_data)
+		return HttpResponse(json_dump)
+	all_hidden = hidden_works.objects.filter(provider_user=request.user)
+	all_works = work.objects.filter(is_active=1)
+	returnArray = []
+	for work_i in all_works:
+		if check_area(user_profile[0].area_id.id, work_i.area.id):
+			hidden_flag=0
+			for hidden_i in all_hidden:
+				if (hidden_i.work_id == work_i):
+					hidden_flag=1
+			if not hidden_flag:
+				work_dict = {}
+				work_dict['pk'] = int(work_i.id)
+				work_dict['model'] = "oos.work"
+				work_fields={}
+				work_fields['client_user'] = str(work_i.client_user.first_name + " " + work_i.client_user.last_name)
+				work_fields['item'] = str(work_i.item)
+				work_fields['text'] = str(work_i.text)
+				work_fields['area'] = str(work_i.area)
+				work_fields['post_date'] = str(work_i.post_date.strftime("%d-%m-%Y %H:%M"))
+				work_fields['end_date'] = str(work_i.end_date.strftime("%d-%m-%Y"))
+				work_dict['fields'] = work_fields
+				returnArray.append(work_dict)
+	json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(returnArray))
+	return HttpResponse(json_dump.replace('\'','"').replace('][',','))

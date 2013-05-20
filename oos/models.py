@@ -29,6 +29,7 @@ class work(models.Model):
 	post_date = models.DateTimeField(auto_now_add=True)
 	show_date = models.DateTimeField(auto_now=True)
 	end_date = models.DateField()
+	is_active = models.BooleanField(default=1)
 
 	def __unicode__(self):
 		return self.item.name + " : " + self.client_user.username
@@ -52,3 +53,9 @@ class price(models.Model):
 	def __unicode__(self):
 		return str(self.work_id) + " : " + str(self.provider_user) + " : " + str(self.price)
 
+class hidden_works(models.Model):
+	work_id = models.ForeignKey(work, unique=False)
+	provider_user = models.ForeignKey(User, unique=False, related_name="hidden_provider")
+
+	def __unicode__(self):
+		return str(self.work_id) + " : " + str(self.provider_user) 
