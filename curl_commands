@@ -14,4 +14,4 @@ curl -b /tmp/cookie_prov -d"email=11@23111.com&phone_num1=765432&phone_num2=&add
 curl -b /tmp/cookie -d "work_id=3" http://ws.kazav.net/oos/get_prices/
 curl -b /tmp/cookie http://ws.kazav.net/oos/get_works/
 curl -b /tmp/cookie_prov http://ws.kazav.net/oos/get_prov_works/
-
+curl -b /tmp/cookie http://ws.kazav.net/account/get_areas/

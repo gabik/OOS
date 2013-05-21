@@ -427,7 +427,25 @@ def reset_pass_do(request):
 		msg = "Unknown User ID.. not exist"
 	return HttpResponse(msg)
 
-			
-				
-		
-
+@login_required(login_url='/account/logout/', redirect_field_name=None)
+def get_all_areas(request):
+	json_data=status.objects.filter(status='ERR',MSG=None)
+	json_dump = serializers.serialize("json", json_data)
+	areas = area.objects.all()
+	if not areas:
+		return HttpResponse(json_dump)
+	returnArray = []
+	for area_i in areas:
+		area_dict = {}
+		area_dict['pk'] = int(area_i.id)
+		area_dict['model'] = "account.area"
+		area_fields={}
+		area_fields['name'] = str(area_i.name)
+		if area_i.parent == None:
+			area_fields['parent'] = json.dumps(None)
+		else:
+			area_fields['parent'] = str(area_i.parent.id)
+		area_dict['fields'] = area_fields
+		returnArray.append(area_dict)
+	json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(returnArray))
+	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
