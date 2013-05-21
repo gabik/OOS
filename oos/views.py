@@ -36,32 +36,32 @@ def get_child(request):
 	json_dump = serializers.serialize("json", json_data)
 	return HttpResponse(json_dump)
 
-@login_required(login_url='/account/logout/', redirect_field_name=None)
-def get_work(request):
-	json_data = status.objects.filter(status='ERR', MSG='NE')
-	json_dump = serializers.serialize("json", json_data)
-	if request.method == 'POST':
-		work_id = request.POST['work_id']
-		if work_id == "" :
-			return HttpResponse(json_dump)
-		cur_work = work.objects.filter(id=work_id)
-		if not cur_work:
-			return HttpResponse(json_dump)
-		user_profile = UserProfile.objects.get(user=request.user)
-		PD_flag=True
-		if (request.user == cur_work[0].client_user ) :
-			PD_flag=False
-		elif (not user_profile.is_client) and check_area(user_profile.area_id.id,  cur_work[0].area.id):
-			PD_flag=False
-		if PD_flag:
-			json_data = status.objects.filter(status='ERR', MSG='PD')
-			json_dump = serializers.serialize("json", json_data)
-			return HttpResponse(json_dump)
-		cur_pics = pics.objects.filter(work_id=cur_work).only("pic")
-		json_data = list(status.objects.filter(status='OK')) + list(cur_work) + list(cur_pics) 
-		json_dump = serializers.serialize("json", json_data)
-	return HttpResponse(json_dump)
-
+#@login_required(login_url='/account/logout/', redirect_field_name=None)
+#def get_work(request):
+	#json_data = status.objects.filter(status='ERR', MSG='NE')
+	#json_dump = serializers.serialize("json", json_data)
+	#if request.method == 'POST':
+		#work_id = request.POST['work_id']
+		#if work_id == "" :
+			#return HttpResponse(json_dump)
+		#cur_work = work.objects.filter(id=work_id)
+		#if not cur_work:
+			#return HttpResponse(json_dump)
+		#user_profile = UserProfile.objects.get(user=request.user)
+		#PD_flag=True
+		#if (request.user == cur_work[0].client_user ) :
+			#PD_flag=False
+		#elif (not user_profile.is_client) and check_area(user_profile.area_id.id,  cur_work[0].area.id):
+			#PD_flag=False
+		#if PD_flag:
+			#json_data = status.objects.filter(status='ERR', MSG='PD')
+			#json_dump = serializers.serialize("json", json_data)
+			#return HttpResponse(json_dump)
+		#cur_pics = pics.objects.filter(work_id=cur_work).only("pic")
+		#json_data = list(status.objects.filter(status='OK')) + list(cur_work) + list(cur_pics) 
+		#json_dump = serializers.serialize("json", json_data)
+	#return HttpResponse(json_dump)
+#
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_BC(request):
 	json_data = status.objects.filter(status='ERR', MSG='NE')
@@ -295,11 +295,60 @@ def provider_works(request):
 				work_fields={}
 				work_fields['client_user'] = str(work_i.client_user.first_name + " " + work_i.client_user.last_name)
 				work_fields['item'] = str(work_i.item)
-				work_fields['text'] = str(work_i.text)
-				work_fields['area'] = str(work_i.area)
-				work_fields['post_date'] = str(work_i.post_date.strftime("%d-%m-%Y %H:%M"))
-				work_fields['end_date'] = str(work_i.end_date.strftime("%d-%m-%Y"))
+				#work_fields['text'] = str(work_i.text)
+				#work_fields['area'] = str(work_i.area)
+				work_fields['post_date'] = str(work_i.post_date.strftime("%d/%m/%Y"))# %H:%M"))
+				#work_fields['end_date'] = str(work_i.end_date.strftime("%d-%m-%Y"))
 				work_dict['fields'] = work_fields
 				returnArray.append(work_dict)
 	json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(returnArray))
 	return HttpResponse(json_dump.replace('\'','"').replace('][',','))
+
+@login_required(login_url='/account/logout/', redirect_field_name=None)
+def get_work(request):
+	json_data = status.objects.filter(status='ERR', MSG='NE')
+	json_dump = serializers.serialize("json", json_data)
+	if request.method == 'POST':
+		work_id = request.POST['work_id']
+		if work_id == "" :
+			return HttpResponse(json_dump)
+		cur_work = work.objects.filter(id=work_id)
+		if not cur_work:
+			return HttpResponse(json_dump)
+		user_profile = UserProfile.objects.filter(user=request.user)
+		if not user_profile:
+			return HttpResponse(json_dump)
+		PD_flag=True
+		if (request.user == cur_work[0].client_user ) :
+			PD_flag=False
+		elif (not user_profile[0].is_client) and check_area(user_profile[0].area_id.id,  cur_work[0].area.id):
+			PD_flag=False
+		if PD_flag:
+			json_data = status.objects.filter(status='ERR', MSG='PD')
+			json_dump = serializers.serialize("json", json_data)
+			return HttpResponse(json_dump)
+		returnArray = []
+		for work_i in cur_work:
+			work_dict = {}
+			work_dict['pk'] = int(work_i.id)
+			work_dict['model'] = "oos.work"
+			work_fields={}
+			work_fields['client_user'] = str(work_i.client_user.first_name + " " + work_i.client_user.last_name)
+			work_fields['item'] = str(work_i.item)
+			work_fields['text'] = str(work_i.text)
+			work_fields['area'] = str(work_i.area)
+			work_fields['post_date'] = str(work_i.post_date.strftime("%d/%m/%Y"))# %H:%M"))
+			work_fields['end_date'] = str(work_i.end_date.strftime("%d-%m-%Y"))
+			work_dict['fields'] = work_fields
+			returnArray.append(work_dict)
+		cur_pics = pics.objects.filter(work_id=cur_work).only("pic")
+		for pic_i in cur_pics:
+			pic_dict = {}
+			pic_dict['pk'] = int(pic_i.id)
+			pic_dict['model'] = "oos.workPic"
+			pic_fields = {}
+			pic_fields['pic_url'] = "http://" + request.META['HTTP_HOST'] + "/static/" + str(pic_i.pic)
+			pic_dict['fields'] = pic_fields
+			returnArray.append(pic_dict)
+		json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(returnArray))
+	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
