@@ -13,6 +13,7 @@ class UserProfile(models.Model):
 	phone_num1 = models.CharField(max_length=30)
 	phone_num2 = models.CharField(max_length=30, blank=True, null=True)
 	address = models.CharField(max_length=200)
+	#level = models.ForeignKey(ooos.models.item, unique=False, related_name='prov_item', default=None)
 	level = models.IntegerField(default=0)
 	birthday = models.DateField(blank=True, null=True)
 	is_client = models.BooleanField(default=1)

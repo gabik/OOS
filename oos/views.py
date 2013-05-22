@@ -12,6 +12,21 @@ from django.core import serializers
 from account.views import check_area
 from oos import settings
 
+def check_item_level(higher, lower):
+	if higher == lower:
+		answer = True
+	else:
+		cur_lower = item.objects.filter(id=lower)
+		if  cur_lower:
+			parent_lower = cur_lower[0].parent_id
+			if not parent_lower:
+				answer = False
+			else:
+				answer = check_item_level(higher, cur_lower[0].parent_id.id)
+		else:
+			answer = False
+	return answer
+
 def get_root_parent(itemid):
 	cur_item = item.objects.filter(id=itemid)
 	if cur_item[0].parent_id == None:
@@ -283,7 +298,7 @@ def provider_works(request):
 	all_works = work.objects.filter(is_active=1)
 	returnArray = []
 	for work_i in all_works:
-		if check_area(user_profile[0].area_id.id, work_i.area.id):
+		if check_area(user_profile[0].area_id.id, work_i.area.id) and check_item_level(user_profile[0].level, work_i.item.id):
 			hidden_flag=0
 			for hidden_i in all_hidden:
 				if (hidden_i.work_id == work_i):
@@ -319,9 +334,9 @@ def get_work(request):
 		if not user_profile:
 			return HttpResponse(json_dump)
 		PD_flag=True
-		if (request.user == cur_work[0].client_user ) :
+		if (request.user == cur_work[0].client_user ): 
 			PD_flag=False
-		elif (not user_profile[0].is_client) and check_area(user_profile[0].area_id.id,  cur_work[0].area.id):
+		elif (not user_profile[0].is_client) and check_area(user_profile[0].area_id.id,  cur_work[0].area.id) and check_item_level(user_profile[0].level, cur_work[0].item.id):
 			PD_flag=False
 		if PD_flag:
 			json_data = status.objects.filter(status='ERR', MSG='PD')
