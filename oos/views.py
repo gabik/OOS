@@ -82,7 +82,10 @@ def get_BC(request):
 	json_data = status.objects.filter(status='ERR', MSG='NE')
 	json_dump = serializers.serialize("json", json_data)
 	if request.method == 'POST':
-		price_id = request.POST['price_id']
+		if 'price_id' in request.POST:
+			price_id = request.POST['price_id']
+		else:
+			return HttpResponse(json_dump)
 		if price_id == "" :
 			return HttpResponse(json_dump)
 		cur_price = price.objects.filter(id=price_id)
@@ -137,7 +140,10 @@ def get_user(request):
 	json_data = status.objects.filter(status='ERR',MSG='NE')
 	json_dump = serializers.serialize("json", json_data)
 	if request.method == 'POST':
-		user_id = request.POST['user_id']
+		if 'user_id' in request.POST:
+			user_id = request.POST['user_id']
+		else:
+			return HttpResponse(json_dump)
 		if user_id == "" :
 			cur_user = request.user
 		else:
@@ -229,6 +235,8 @@ def get_prices(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	json_dump = serializers.serialize("json", json_data)
 	if request.method == 'POST':
+		if 'work_id' not in request.POST:
+			return HttpResponse(json_dump)
 		all_prices = price.objects.filter(work_id=request.POST['work_id'], is_active=True).order_by('price')
 		if all_prices:
 			return_prices = []
@@ -324,6 +332,8 @@ def get_work(request):
 	json_data = status.objects.filter(status='ERR', MSG='NE')
 	json_dump = serializers.serialize("json", json_data)
 	if request.method == 'POST':
+		if 'work_id' not in request.POST:
+			return HttpResponse(json_dump)
 		work_id = request.POST['work_id']
 		if work_id == "" :
 			return HttpResponse(json_dump)
