@@ -1,5 +1,5 @@
 import datetime
-from oos.models import item, work, pics, price, hidden_works
+from oos.models import item, work, pics, price, hidden_works, item_cat, item_keys, item_values, items
 from oos.forms import new_work, new_price, new_pic
 from account.models import UserProfile, area, status
 from django.utils import simplejson as json
@@ -367,3 +367,63 @@ def get_work(request):
 			returnArray.append(pic_dict)
 		json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(returnArray))
 	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
+
+@login_required(login_url='/account/logout/', redirect_field_name=None)
+def get_cats(request):
+	json_data = status.objects.filter(status='ERR', MSG='NE')
+	json_dump = serializers.serialize("json", json_data)
+	all_cats = item_cat.objects.all().order_by('id')
+	if not all_cats:
+		return HttpResponse(json_dump)
+	json_data = list(status.objects.filter(status='OK')) + list(all_cats)
+	json_dump = serializers.serialize("json", json_data)
+	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
+
+@login_required(login_url='/account/logout/', redirect_field_name=None)
+def get_keys_for_cat(request):
+	json_data = status.objects.filter(status='ERR', MSG='NE')
+	json_dump = serializers.serialize("json", json_data)
+	if request.method == 'POST':
+		if 'cat_id' in request.POST:
+			cat_id = request.POST['cat_id']
+		else:
+			return get_cats(request)
+		if cat_id == "" :
+			return HttpResponse(json_dump)
+		cur_cat = item_cat.objects.filter(id=cat_id)
+		if not cur_cat:
+			return HttpResponse(json_dump)
+		items = item_keys.objects.filter(cat=cur_cat[0]).order_by('id')
+		if not items:
+			return HttpResponse(json_dump)
+		json_data = list(status.objects.filter(status='OK')) + list(items)
+		json_dump = serializers.serialize("json", json_data)
+	else:
+		return get_cats(request)
+	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
+
+@login_required(login_url='/account/logout/', redirect_field_name=None)
+def get_values(request):
+	json_data = status.objects.filter(status='ERR', MSG='NE')
+	json_dump = serializers.serialize("json", json_data)
+	if request.method == 'POST':
+		if 'key' in request.POST:
+			key_id = request.POST['key']
+		else:
+			return HttpResponse(json_dump)
+		cur_key = item_keys.objects.filter(id=key_id)
+		if cur_key[0].parent == None:
+			values = item_values.objects.filter(key=cur_key)
+		else:
+			if 'parent' in request.POST:
+				parent_id = request.POST['parent']
+				values = item_values.objects.filter(key=cur_key,parent=parent_id)
+			else:
+				json_data = status.objects.filter(status='ERR', MSG='PD')
+				json_dump = serializers.serialize("json", json_data)
+				return HttpResponse(json_dump)
+		if not values:
+			return HttpResponse(json_dump)
+		json_data = list(status.objects.filter(status='OK')) + list(values)
+		json_dump = serializers.serialize("json", json_data)
+	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))	
