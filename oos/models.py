@@ -59,3 +59,32 @@ class hidden_works(models.Model):
 
 	def __unicode__(self):
 		return str(self.work_id) + " : " + str(self.provider_user) 
+
+class item_cat(models.Model):
+	name = models.CharField(max_length=100)
+
+	def __unicode__(self):
+		return str(self.id) + " : " + str(self.name)
+
+class item_keys(models.Model):
+	cat = models.ForeignKey(item_cat, unique=False, related_name="item_keys_cat")
+	name = models.CharField(max_length=100)
+	parent = models.ForeignKey('self', unique=False, blank=True, null=True, related_name="item_keys_parent")
+
+	def __unicode__(self):
+		return str(self.id) + " : (" + str(self.cat) + ") : " + str(self.name) 
+
+class item_values(models.Model):
+	key = models.ForeignKey(item_keys, unique=False, related_name="item_values_key")
+	value = models.CharField(max_length=100)
+	parent = models.ForeignKey('self', unique=False, blank=True, null=True, related_name="item_keys_parent")
+
+	def __unicode__(self):
+		return str(self.id) + " : (" + str(self.key) + ") : " + str(self.value) 
+
+class items(models.Model):
+	item_id = models.PositiveSmallIntegerField()
+	value = models.ForeignKey(item_values, unique=False, blank=False, null=False)
+
+	def __unicode__(self):
+		return str(self.id) + " : (" + str(self.item_id) + ") : " + str(self.value)
