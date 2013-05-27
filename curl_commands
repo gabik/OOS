@@ -16,3 +16,4 @@ curl -b /tmp/cookie -d "work_id=3" http://ws.kazav.net/oos/get_prices/
 curl -b /tmp/cookie http://ws.kazav.net/oos/get_works/
 curl -b /tmp/cookie_prov http://ws.kazav.net/oos/get_prov_works/
 curl -b /tmp/cookie http://ws.kazav.net/account/get_areas/
+curl -b /tmp/cookie -d "value1=5&value2=7&value3=11&junk=15" http://ws.kazav.net/oos/post_item/

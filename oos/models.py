@@ -84,7 +84,7 @@ class item_values(models.Model):
 
 class items(models.Model):
 	item_id = models.PositiveSmallIntegerField()
-	value = models.ForeignKey(item_values, unique=False, blank=False, null=False)
+	value = models.ForeignKey(item_values, unique=False, blank=True, null=True)
 
 	def __unicode__(self):
 		return str(self.id) + " : (" + str(self.item_id) + ") : " + str(self.value)

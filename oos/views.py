@@ -1,4 +1,5 @@
 import datetime
+from django.db.models import Max
 from oos.models import item, work, pics, price, hidden_works, item_cat, item_keys, item_values, items
 from oos.forms import new_work, new_price, new_pic
 from account.models import UserProfile, area, status
@@ -437,3 +438,41 @@ def get_values(request):
 		json_data = list(status.objects.filter(status='OK')) + list(values)
 		json_dump = serializers.serialize("json", json_data)
 	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))	
+
+@login_required(login_url='/account/logout/', redirect_field_name=None)
+def post_item(request):
+	json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+	json_dump = serializers.serialize("json", json_data)
+	if UserProfile.objects.get(user=request.user).is_client:
+		if request.method == 'POST':
+			max_item = int(items.objects.all().aggregate(Max('item_id'))['item_id__max'])+1
+			new_max_item = items(item_id=max_item, value=None)
+			new_max_item.save()
+			for k,v in request.POST.iteritems():
+				if k.find("value") == 0:
+					cur_value = item_values.objects.filter(id=v)
+					if not cur_value:
+						return HttpResponse(json_dump)
+					new_max_item = items(item_id=max_item, value=cur_value[0])
+					new_max_item.save()
+			new_max_item = items.objects.filter(item_id=max_item, value=None)
+			if not new_max_item:
+				json_data=status.objects.filter(status='ERR',MSG=None)
+				json_dump = serializers.serialize("json", json_data)
+				return HttpResponse(json_dump)
+			new_max_item.delete()
+			returnArray = []
+			work_dict = {}
+			work_dict['pk'] = int(max_item)
+			work_dict['model'] = "oos.item_id"
+			work_fields={}
+			work_fields['id'] = int(max_item)
+			work_dict['fields'] = work_fields
+			returnArray.append(work_dict)
+			json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(returnArray))
+		else:
+			return HttpResponse(json_dump)
+	else:
+		return HttpResponse(json_dump)
+	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
+
