@@ -411,7 +411,7 @@ def get_keys_for_cat(request):
 		json_dump = serializers.serialize("json", json_data)
 	else:
 		return get_cats(request)
-	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
+	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{').replace(': null,', ': 0,'))
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_values(request):
@@ -437,7 +437,7 @@ def get_values(request):
 			return HttpResponse(json_dump)
 		json_data = list(status.objects.filter(status='OK')) + list(values)
 		json_dump = serializers.serialize("json", json_data)
-	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))	
+	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{').replace(': null,', ': 0,'))
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def post_item(request):
