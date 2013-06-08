@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
-from oos.views import get_child, get_work, get_user, post_work, post_price, post_pic, get_works, get_prices, get_BC, provider_works, get_keys_for_cat, get_cats, get_values, post_item
+from oos.views import get_child, get_work, get_user, post_work, post_price, post_pic, get_works, get_prices, get_BC, provider_works, get_keys_for_cat, get_cats, get_values, post_item, del_work
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -15,6 +15,7 @@ urlpatterns = patterns('',
 	(r'^oos/get_works/$', get_works),
 	(r'^oos/get_user/$', get_user),
 	(r'^oos/post_work/$', post_work),
+	(r'^oos/del_work/$', del_work),
 	(r'^oos/post_price/$', post_price),
 	(r'^oos/post_pic/$', post_pic),
 	(r'^oos/get_prices/$', get_prices),

@@ -42,13 +42,19 @@ def check_item_level(higher, lower):
 
 
 def get_root_parent(itemid):
-	cur_item = item.objects.filter(id=itemid)
-	if cur_item[0].parent_id == None:
-		answer = cur_item[0].id
-	else:
-		parent = item.objects.filter(id=cur_item[0].parent_id.id)
-		answer = get_root_parent(parent[0].id)
-	return answer
+	cur_item = items.objects.filter(item_id=itemid)
+	if not cur_item:
+		return False
+	item_cat = cur_item[0].value.key.cat
+	if not item_cat:
+		return False
+	return item_cat.id
+	#if cur_item[0].parent_id == None:
+		#answer = cur_item[0].id
+	#else:
+		#parent = item.objects.filter(id=cur_item[0].parent_id.id)
+		#answer = get_root_parent(parent[0].id)
+	#return answer
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_child(request):
@@ -131,7 +137,7 @@ def get_BC(request):
 def get_works(request):
 	json_data = status.objects.filter(status='ERR', MSG='NE')
 	json_dump = serializers.serialize("json", json_data)
-	all_work = work.objects.filter(client_user=request.user)
+	all_work = work.objects.filter(client_user=request.user, is_active=True).order_by('id').reverse()
 	if not all_work:
 		json_data = status.objects.filter(status='WRN', MSG='EMP')
 		json_dump = serializers.serialize("json", json_data)
@@ -139,11 +145,15 @@ def get_works(request):
 		json_data = list(status.objects.filter(status='OK')) 
 		all_works = []
 		for i in all_work:
-			root_parent_name = item.objects.get(id=get_root_parent(i.item)).name
+			cur_item = items.objects.filter(item_id=i.item).order_by('id').reverse()
+			item_str = ""
+			for vlue in cur_item:
+				item_str += " " + vlue.value.value
+			root_parent_name = item_cat.objects.get(id=get_root_parent(i.item)).name
 			all_works_dict = {}
 			all_works_dict['pk'] = int(i.id)
 			all_works_dict['model'] = "oos.work"
-			all_works_dict['fields'] = {'item': str(i.item.name), 'root_parent': str(root_parent_name)}
+			all_works_dict['fields'] = {'item': str(item_str), 'root_parent': str(root_parent_name)}
 			all_works.append(all_works_dict)
 			#json_data+= list(all_works_dict) 
 		json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(all_works)) #serializers.serialize("json", json_data)
@@ -187,28 +197,41 @@ def get_user(request):
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def post_work(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
+	json_dump = serializers.serialize("json", json_data)
 	errors=""
 	if UserProfile.objects.get(user=request.user).is_client:
 		if request.method == 'POST':
 			cur_work = new_work(request.POST)
 			if cur_work.is_valid():
 				work_clean = cur_work.cleaned_data
-				if item.objects.filter(parent_id=request.POST['item']) :
-					json_data=list(status.objects.filter(status='ERR',MSG='PD'))
-				else:
-					cur_work_save = cur_work.save(commit=False)
-					cur_work_save.client_user = request.user
-					cur_work_save.save()
-					json_data = status.objects.filter(status='OK')
+				#if items.objects.filter(parent_id=request.POST['item']) :
+					#json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+				#else:
+				cur_work_save = cur_work.save(commit=False)
+				cur_work_save.client_user = request.user
+				cur_work_save.is_active = True
+				cur_work_save.save()
+				max_item=cur_work_save.id
+				returnArray = []
+				work_dict = {}
+				work_dict['pk'] = int(max_item)
+				work_dict['model'] = "oos.work_id"
+				work_fields={}
+				work_fields['id'] = int(max_item)
+				work_dict['fields'] = work_fields
+				returnArray.append(work_dict)
+				json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(returnArray))
+				return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
 			else:
-				json_data = status.objects.filter(status='WRN')
+				json_data = status.objects.filter(status='WRN',MSG="")
+				json_dump = serializers.serialize("json", json_data)
 				#errors = list(cur_work.errors.items())
 				errors = str([(k, v[0].__str__()) for k, v in cur_work.errors.items()])
 		else:
 			json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+			json_dump = serializers.serialize("json", json_data)
 	else:
 		json_data=list(status.objects.filter(status='ERR',MSG='PD'))
-	json_dump = serializers.serialize("json", json_data)
 	json_dump += errors
 	return HttpResponse(json_dump)
 			
@@ -232,7 +255,7 @@ def post_price(request):
 				else:
 					json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 			else:
-				json_data = status.objects.filter(status='WRN')
+				json_data = status.objects.filter(status='WRN',MSG="")
 				#errors = str(cur_price.errors)
 				errors = ",[" + str(dict([(k, v[0].__str__()) for k, v in cur_price.errors.items()])) + "]"
 		else:
@@ -293,14 +316,33 @@ def post_pic(request):
 				else:
 					json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 		else:
-			json_data = status.objects.filter(status='WRN')
+			json_data = status.objects.filter(status='WRN',MSG="")
 			#errors = list(pic_form.errors.items())
-			errors = str([(k, v[0].__str__()) for k, v in cur_form.errors.items()])
+			errors = str([(k, v[0].__str__()) for k, v in pic_form.errors.items()])
 	#else:
 		#pic_form = new_pic()
 		#return render_to_response('oos/post_pic.html', { 'pic_form': pic_form}, context_instance=RequestContext(request))
 	json_dump = serializers.serialize("json", json_data)
 	json_dump += errors
+	return HttpResponse(json_dump)
+
+@login_required(login_url='/account/logout/', redirect_field_name=None)
+def del_work(request):
+	json_data=list(status.objects.filter(status='ERR',MSG='PD'))
+	if request.method == 'POST':
+		if 'work_id' in request.POST:
+			work_id = request.POST['work_id']
+			cur_work = work.objects.filter(id=work_id)
+			if not cur_work:
+				json_data=list(status.objects.filter(status='ERR',MSG='NE'))
+				json_dump = serializers.serialize("json", json_data)
+				return HttpResponse(json_dump)
+			cur_work0 = cur_work[0]
+			if cur_work0.client_user == request.user:
+				cur_work0.is_active = False
+				cur_work0.save()
+				json_data = status.objects.filter(status='OK')
+	json_dump = serializers.serialize("json", json_data)
 	return HttpResponse(json_dump)
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
@@ -326,12 +368,16 @@ def provider_works(request):
 				if (hidden_i.work_id == work_i):
 					hidden_flag=1
 			if not hidden_flag:
+				cur_item = items.objects.filter(item_id=work_i.item).order_by('id').reverse()
+				item_str = ""
+				for vlue in cur_item:
+					item_str += " " + vlue.value.value
 				work_dict = {}
 				work_dict['pk'] = int(work_i.id)
 				work_dict['model'] = "oos.work"
 				work_fields={}
 				work_fields['client_user'] = str(work_i.client_user.first_name + " " + work_i.client_user.last_name)
-				work_fields['item'] = str(work_i.item)
+				work_fields['item'] = str(item_str)
 				#work_fields['text'] = str(work_i.text)
 				#work_fields['area'] = str(work_i.area)
 				work_fields['post_date'] = str(work_i.post_date.strftime("%d/%m/%Y"))# %H:%M"))
@@ -367,19 +413,32 @@ def get_work(request):
 			json_dump = serializers.serialize("json", json_data)
 			return HttpResponse(json_dump)
 		returnArray = []
-		for work_i in cur_work:
-			work_dict = {}
-			work_dict['pk'] = int(work_i.id)
-			work_dict['model'] = "oos.work"
-			work_fields={}
-			work_fields['client_user'] = str(work_i.client_user.first_name + " " + work_i.client_user.last_name)
-			work_fields['item'] = str(work_i.item)
-			work_fields['text'] = str(work_i.text)
-			work_fields['area'] = str(work_i.area)
-			work_fields['post_date'] = str(work_i.post_date.strftime("%d/%m/%Y"))# %H:%M"))
-			work_fields['end_date'] = str(work_i.end_date.strftime("%d-%m-%Y"))
-			work_dict['fields'] = work_fields
-			returnArray.append(work_dict)
+		work_i = cur_work[0]
+		work_dict = {}
+		work_dict['pk'] = int(work_i.id)
+		work_dict['model'] = "oos.work"
+		work_fields={}
+		work_fields['client_user'] = str(work_i.client_user.first_name + " " + work_i.client_user.last_name)
+		#work_fields['item'] = str(work_i.item)
+		work_fields['text'] = str(work_i.text)
+		work_fields['area'] = str(work_i.area)
+		work_fields['post_date'] = str(work_i.post_date.strftime("%d/%m/%Y"))# %H:%M"))
+		work_fields['end_date'] = str(work_i.end_date.strftime("%d-%m-%Y"))
+		work_dict['fields'] = work_fields
+		returnArray.append(work_dict)
+
+		cur_item = items.objects.filter(item_id=work_i.item)
+		if not cur_item:
+			return HttpResponse(json_dump)
+		for i in cur_item:
+			item_dict={}
+			item_dict['pk'] = int(i.value.id)
+			item_dict['model'] = "oos.itemKV"
+			item_fields = {}
+			item_fields[str(i.value.key.name)] = str(i.value.value)
+			item_dict['fields'] = item_fields
+			returnArray.append(item_dict)
+		
 		cur_pics = pics.objects.filter(work_id=cur_work).only("pic")
 		for pic_i in cur_pics:
 			pic_dict = {}
