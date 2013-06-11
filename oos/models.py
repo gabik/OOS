@@ -75,7 +75,7 @@ class price(models.Model):
 	work_id = models.ForeignKey(work, unique=False)
 	provider_user = models.ForeignKey(User, unique=False, related_name="price_provider")
 	price = models.DecimalField(max_digits=10,decimal_places=2)
-	text = models.TextField()
+	text = models.TextField(blank=True)
 	post_date = models.DateTimeField(auto_now_add=True)
 	show_date = models.DateTimeField(auto_now=True)
 	is_active = models.BooleanField(default=1)
