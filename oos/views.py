@@ -276,12 +276,27 @@ def post_price(request):
 			if cur_price.is_valid():
 				work_area = work.objects.get(id=request.POST['work_id']).area.id
 				if check_area(cur_user_area, work_area):
-					price_clean = cur_price.cleaned_data
-					cur_price_save = cur_price.save(commit=False)
-					cur_price_save.provider_user = request.user
-					cur_price_save.is_active = True
-					cur_price_save.save()
-					json_data = status.objects.filter(status='OK')
+					old_price = price.objects.filter(work_id=request.POST['work_id'], provider_user=request.user)
+					if old_price:
+						if 'overwrite' in request.POST:
+							if (request.POST['overwrite'] == '1'):
+								price_clean = cur_price.cleaned_data
+								old_price0 = old_price[0]
+								old_price0.price=price_clean['price']
+								old_price0.text=price_clean['text']
+								old_price0.save()
+								json_data = status.objects.filter(status='OK')
+							else:
+								json_data = status.objects.filter(status='WRN',MSG="AEX")
+						else:
+							json_data = status.objects.filter(status='WRN',MSG="AEX")
+					else:
+						price_clean = cur_price.cleaned_data
+						cur_price_save = cur_price.save(commit=False)
+						cur_price_save.provider_user = request.user
+						cur_price_save.is_active = True
+						cur_price_save.save()
+						json_data = status.objects.filter(status='OK')
 				else:
 					json_data=list(status.objects.filter(status='ERR',MSG='PD'))
 			else:
@@ -388,11 +403,12 @@ def provider_works(request):
 		json_data=status.objects.filter(status='ERR',MSG='PD')
 		json_dump = serializers.serialize("json", json_data)
 		return HttpResponse(json_dump)
+	today=datetime.date.today()
 	all_hidden = hidden_works.objects.filter(provider_user=request.user)
 	all_works = work.objects.filter(is_active=1)
 	returnArray = []
 	for work_i in all_works:
-		if check_area(user_profile[0].area_id.id, work_i.area.id) and check_item_level(user_profile[0].level, work_i.item):
+		if check_area(user_profile[0].area_id.id, work_i.area.id) and check_item_level(user_profile[0].level, work_i.item) and (work_i.end_date >= today):
 			hidden_flag=0
 			for hidden_i in all_hidden:
 				if (hidden_i.work_id == work_i):
@@ -414,7 +430,9 @@ def provider_works(request):
 				#work_fields['end_date'] = str(work_i.end_date.strftime("%d-%m-%Y"))
 				work_dict['fields'] = work_fields
 				returnArray.append(work_dict)
-	json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(returnArray))
+	prov_prices = price.objects.filter(provider_user=request.user)
+	json_data = list(status.objects.filter(status='OK')) + list(prov_prices)
+	json_dump = serializers.serialize("json", json_data) + str(list(returnArray))
 	return HttpResponse(json_dump.replace('\'','"').replace('][',','))
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
@@ -581,4 +599,46 @@ def post_item(request):
 	else:
 		return HttpResponse(json_dump)
 	return HttpResponse(json_dump.replace('\'','"').replace('][',',').replace('}, {','},{'))
+
+@login_required(login_url='/account/logout/', redirect_field_name=None)
+def old_provider_works(request):
+	json_data=status.objects.filter(status='ERR',MSG='NE')
+	json_dump = serializers.serialize("json", json_data)
+	user_profile = UserProfile.objects.filter(user=request.user)
+	if not user_profile:
+		json_data=status.objects.filter(status='ERR',MSG='PD')
+		json_dump = serializers.serialize("json", json_data)
+		return HttpResponse(json_dump)
+	if user_profile[0].is_client:
+		json_data=status.objects.filter(status='ERR',MSG='PD')
+		json_dump = serializers.serialize("json", json_data)
+		return HttpResponse(json_dump)
+	today=datetime.date.today()
+	all_hidden = hidden_works.objects.filter(provider_user=request.user)
+	all_works = work.objects.filter(is_active=1)
+	returnArray = []
+	for work_i in all_works:
+		if check_area(user_profile[0].area_id.id, work_i.area.id) and check_item_level(user_profile[0].level, work_i.item) and (work_i.end_date < today):
+			hidden_flag=0
+			for hidden_i in all_hidden:
+				if (hidden_i.work_id == work_i):
+					hidden_flag=1
+			if not hidden_flag:
+				cur_item = items.objects.filter(item_id=work_i.item).order_by('id').reverse()
+				item_str = ""
+				for vlue in cur_item:
+					item_str += " " + vlue.value.value
+				work_dict = {}
+				work_dict['pk'] = int(work_i.id)
+				work_dict['model'] = "oos.work"
+				work_fields={}
+				work_fields['client_user'] = str(work_i.client_user.first_name + " " + work_i.client_user.last_name)
+				work_fields['item'] = str(item_str)
+				work_fields['post_date'] = str(work_i.post_date.strftime("%d/%m/%Y"))# %H:%M"))
+				work_dict['fields'] = work_fields
+				returnArray.append(work_dict)
+	prov_prices = price.objects.filter(provider_user=request.user)
+	json_data = list(status.objects.filter(status='OK')) + list(prov_prices)
+	json_dump = serializers.serialize("json", json_data) + str(list(returnArray))
+	return HttpResponse(json_dump.replace('\'','"').replace('][',','))
 

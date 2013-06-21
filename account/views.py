@@ -95,8 +95,14 @@ def get_P_email(request):
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_P_profile(request):
-	json_data=status.objects.filter(status='ERR',MSG=None)
-	userprofile = UserProfile.objects.get(user=request.user)
+	json_data=status.objects.filter(status='ERR',MSG='PD')
+	userprofileF = UserProfile.objects.filter(user=request.user)
+	if not userprofileF:
+		return HttpResponse(serializers.serialize("json", list(status.objects.filter(status='ERR',MSG='NE'))))
+	userprofile = userprofileF[0]
+	prof_dict = {}
+	prof_dict['pk'] = int(request.user.id)
+	prof_dict['model'] = "account.profile"
 	userdata = {}
 	userdata['first_name'] = str(request.user.first_name)
 	userdata['last_name'] = str(request.user.last_name)
@@ -108,12 +114,17 @@ def get_P_profile(request):
 		userdata['birthday'] = str(userprofile.birthday)
 	else : 
 		userdata['birthday'] = ""
-	userdata['area_id'] = str(userprofile.area_id.id)
-	userdump = str(userdata)
-	json_data = status.objects.filter(status='OK')
-	json_dump = "[" + serializers.serialize("json", json_data)
-	json_dump += ",[" + userdump + "]]"
-	return HttpResponse(json_dump.replace('\'','"'))
+	userdata['area'] = str(userprofile.area_id.name)
+	prof_dict['fields'] = userdata
+	returnArray = []
+	returnArray.append(prof_dict)
+	#userdump = str(userdata)
+	#json_data = status.objects.filter(status='OK')
+	#json_dump = serializers.serialize("json", json_data) + str(list(prof_dict))
+	#json_dump += ",[" + userdump + "]]"
+	json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(returnArray))
+	return HttpResponse(json_dump.replace('\'','"').replace('][',','))
+	#return HttpResponse(json_dump.replace('\'','"'))
 
 def create_P_user2(request):
 	json_dump = json.dumps({'status': "ERR"})
