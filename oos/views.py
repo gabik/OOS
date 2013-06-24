@@ -158,7 +158,11 @@ def get_works(request):
 				all_works_dict['fields'] = {'item': str(item_str), 'root_parent': str(root_parent_name)}
 				all_works.append(all_works_dict)
 				#json_data+= list(all_works_dict) 
-		json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(all_works)) #serializers.serialize("json", json_data)
+		if not all_works:
+			json_data = status.objects.filter(status='WRN', MSG='EMP')
+			json_dump = serializers.serialize("json", json_data)
+		else:
+			json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(all_works)) #serializers.serialize("json", json_data)
 	return HttpResponse(json_dump.replace('\'','"').replace('][',','))
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
@@ -430,6 +434,9 @@ def provider_works(request):
 				#work_fields['end_date'] = str(work_i.end_date.strftime("%d-%m-%Y"))
 				work_dict['fields'] = work_fields
 				returnArray.append(work_dict)
+	if not returnArray:
+		json_dump = serializers.serialize("json", list(status.objects.filter(status='WRN',MSG="EMP")))
+		return HttpResponse(json_dump.replace('\'','"').replace('][',','))
 	prov_prices = price.objects.filter(provider_user=request.user)
 	json_data = list(status.objects.filter(status='OK')) + list(prov_prices)
 	json_dump = serializers.serialize("json", json_data) + str(list(returnArray))
@@ -637,6 +644,9 @@ def old_provider_works(request):
 				work_fields['post_date'] = str(work_i.post_date.strftime("%d/%m/%Y"))# %H:%M"))
 				work_dict['fields'] = work_fields
 				returnArray.append(work_dict)
+	if not returnArray:
+		json_dump = serializers.serialize("json", list(status.objects.filter(status='WRN',MSG="EMP")))
+		return HttpResponse(json_dump.replace('\'','"').replace('][',','))
 	prov_prices = price.objects.filter(provider_user=request.user)
 	json_data = list(status.objects.filter(status='OK')) + list(prov_prices)
 	json_dump = serializers.serialize("json", json_data) + str(list(returnArray))
