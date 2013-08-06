@@ -2,7 +2,7 @@ from django.contrib.auth.views import login, logout, password_reset_confirm, pas
 from django.conf.urls.defaults import *
 from web import views
 
-urlpatterns = patterns('account.views',
+urlpatterns = patterns('web.views',
 	(r'^login/$', login),
 )
 

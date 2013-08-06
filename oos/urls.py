@@ -1,11 +1,11 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
-from oos.views import get_child, get_work, get_user, post_work, post_price, post_pic, get_works, get_prices, get_BC, provider_works, get_keys_for_cat, get_cats, get_values, post_item, del_work, get_old_works, old_provider_works, web_index
+from oos.views import get_child, get_work, get_user, post_work, post_price, post_pic, get_works, get_prices, get_BC, provider_works, get_keys_for_cat, get_cats, get_values, post_item, del_work, get_old_works, old_provider_works
 admin.autodiscover()
 
 urlpatterns = patterns('',
-	(r'^web/$', include('web.urls')),
+	(r'^web/', include('web.urls')),
 	(r'^account/', include('account.urls')),
 	(r'^oos/get_child/$', get_child),
 	(r'^oos/get_keys/$', get_keys_for_cat),
