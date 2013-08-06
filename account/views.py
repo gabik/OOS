@@ -281,7 +281,7 @@ def change_P_pass(request):
 	json_dump += errors + "]"
 	return HttpResponse(json_dump.replace('\'','"'))
 
-def accept_prov(requesti, UserId, UserHash):
+def accept_prov(request, UserId, UserHash):
 	msg = "Error... unknowd.. Shit.."
 	cur_user = User.objects.filter(id=UserId)
 	if cur_user:
@@ -312,7 +312,7 @@ def accept_prov(requesti, UserId, UserHash):
 		msg = "Unknown User ID.. not exist"
 	return HttpResponse(msg)
 
-def reject_prov(requesti, UserId, UserHash):
+def reject_prov(request, UserId, UserHash):
 	msg = "Error... unknowd.. Shit.."
 	cur_user = User.objects.filter(id=UserId)
 	if cur_user:
