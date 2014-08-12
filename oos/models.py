@@ -4,6 +4,7 @@ from account.models import area
 
 class item_cat(models.Model):
 	name = models.CharField(max_length=100)
+	img = models.ImageField(upload_to = 'category_img/' , default = 'category_img/default.jpg')
 
 	def __unicode__(self):
 		return str(self.id) + " : " + str(self.name)

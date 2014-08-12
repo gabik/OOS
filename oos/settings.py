@@ -130,6 +130,7 @@ INSTALLED_APPS = (
 		'oos',
 		'web',
 		#'registration',
+		'south',
 )
 
 # A sample logging configuration. The only tangible logging

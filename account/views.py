@@ -438,7 +438,6 @@ def reset_pass_do(request):
 		msg = "Unknown User ID.. not exist"
 	return HttpResponse(msg)
 
-@login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_all_areas(request):
 	json_data=status.objects.filter(status='ERR',MSG=None)
 	json_dump = serializers.serialize("json", json_data)
