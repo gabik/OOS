@@ -166,6 +166,36 @@ def get_works(request):
 	return HttpResponse(json_dump.replace('\'','"').replace('][',','))
 
 @login_required(login_url='/account/logout/', redirect_field_name=None)
+def get_all_works(request):
+	json_data = status.objects.filter(status='ERR', MSG='NE')
+	json_dump = serializers.serialize("json", json_data)
+	all_work = work.objects.filter(client_user=request.user).order_by('id').reverse()
+	if not all_work:
+		json_data = status.objects.filter(status='WRN', MSG='EMP')
+		json_dump = serializers.serialize("json", json_data)
+	else:
+		json_data = list(status.objects.filter(status='OK'))
+		all_works = []
+		for i in all_work:
+			cur_item = items.objects.filter(item_id=i.item).order_by('id').reverse()
+			item_str = ""
+			for vlue in cur_item:
+				item_str += " " + vlue.value.value
+			root_parent_name = item_cat.objects.get(id=get_root_parent(i.item))
+			all_works_dict = {}
+			all_works_dict['pk'] = int(i.id)
+			all_works_dict['model'] = "oos.work"
+			all_works_dict['fields'] = {'item': str(item_str), 'root_parent': str(root_parent_name.name), 'root_pic': str(root_parent_name.img)}
+			all_works.append(all_works_dict)
+			#json_data+= list(all_works_dict)
+		if not all_works:
+			json_data = status.objects.filter(status='WRN', MSG='EMP')
+			json_dump = serializers.serialize("json", json_data)
+		else:
+			json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(all_works)) #serializers.serialize("json", json_data)
+	return HttpResponse(json_dump.replace('\'','"').replace('][',','))
+
+@login_required(login_url='/account/logout/', redirect_field_name=None)
 def get_old_works(request):
 	json_data = status.objects.filter(status='ERR', MSG='NE')
 	json_dump = serializers.serialize("json", json_data)
