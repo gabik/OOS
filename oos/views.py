@@ -360,7 +360,7 @@ def get_prices(request):
 				all_price_dict = {}
 				all_price_dict['pk'] = int(i.id)
 				all_price_dict['model'] = "oos.price"
-				all_price_dict['fields'] = {'price': str(i.price), 'provider_user': str(i.provider_user.first_name + " " + i.provider_user.last_name)}
+				all_price_dict['fields'] = {'price': str(i.price), 'pid': str(i.provider_user.id), 'provider_user': str(i.provider_user.first_name + " " + i.provider_user.last_name)}
 				return_prices.append(all_price_dict)
 			json_dump = serializers.serialize("json", list(status.objects.filter(status='OK'))) + str(list(return_prices)) 
 		else:
